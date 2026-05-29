@@ -1,7 +1,6 @@
 import 'dotenv/config'
 import express from 'express'
 import cors from 'cors'
-import multer from 'multer'
 import {
   S3Client,
   PutObjectCommand,
@@ -84,11 +83,6 @@ const getPublicUrl = (key) => {
   return `https://${CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com/${R2_BUCKET_NAME}/${key}`
 }
 
-// ─── Multer — store upload in memory (stream directly to R2) ──────────────────
-const upload = multer({
-  storage: multer.memoryStorage(),
-  limits: { fileSize: 1024 * 1024 * 1024 }, // 1 GB
-})
 
 // ─── Express App ──────────────────────────────────────────────────────────────
 const app = express()
@@ -112,34 +106,33 @@ app.get('/api/health', (_req, res) => {
 
 // ─── Upload Route ─────────────────────────────────────────────────────────────
 // POST /api/upload (Admin Authenticated)
-// Body: multipart/form-data  { file: <binary>, key: <string> }
-app.post('/api/upload', requireAdmin, upload.single('file'), async (req, res) => {
+// Body: application/json  { key: string, contentType: string }
+// Returns: { presignedUrl: string, publicUrl: string, key: string }
+//
+// The browser then PUTs the raw file directly to presignedUrl (no size limit).
+// R2 credentials never leave this server.
+app.post('/api/upload', requireAdmin, async (req, res) => {
   try {
-    if (!req.file) {
-      return res.status(400).json({ error: 'No file provided' })
-    }
+    const { key, contentType } = req.body ?? {}
+    if (!key) return res.status(400).json({ error: 'Missing key' })
 
-    const key = req.body.key || req.file.originalname
-    const contentType = req.file.mimetype || 'application/octet-stream'
+    const ct = contentType || 'application/octet-stream'
 
     const command = new PutObjectCommand({
       Bucket: R2_BUCKET_NAME,
       Key: key,
-      Body: req.file.buffer,
-      ContentType: contentType,
-      // Make the object publicly readable
-      // Note: bucket-level public access must be enabled in Cloudflare dashboard
+      ContentType: ct,
     })
 
-    await r2.send(command)
+    const { getSignedUrl } = await import('@aws-sdk/s3-request-presigner')
+    const presignedUrl = await getSignedUrl(r2, command, { expiresIn: 3600 })
+    const publicUrl = getPublicUrl(key)
 
-    const url = getPublicUrl(key)
-    console.log(`✅  Uploaded: ${key} (${req.file.size} bytes) → ${url}`)
-
-    return res.json({ success: true, url, key })
+    console.log(`✅  Presigned URL generated for: ${key} → ${publicUrl}`)
+    return res.json({ presignedUrl, publicUrl, key })
   } catch (err) {
-    console.error('Upload error:', err)
-    return res.status(500).json({ error: err.message || 'Upload failed' })
+    console.error('Presign error:', err)
+    return res.status(500).json({ error: err.message || 'Failed to generate upload URL' })
   }
 })
 

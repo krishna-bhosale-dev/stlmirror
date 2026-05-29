@@ -19,7 +19,7 @@ export default defineConfig([
     },
   },
   {
-    files: ['server/**/*.js', 'eslint.config.js', 'vite.config.js', 'test_supabase.js'],
+    files: ['server/**/*.js', 'api/**/*.js', 'eslint.config.js', 'vite.config.js'],
     languageOptions: {
       globals: {
         ...globals.node,

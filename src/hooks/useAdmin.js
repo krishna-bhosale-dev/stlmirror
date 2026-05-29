@@ -31,7 +31,17 @@ export const useAdmin = () => {
 
   useEffect(() => { fetchAdminFiles() }, [fetchAdminFiles]) // eslint-disable-line react-hooks/set-state-in-effect
 
-  // ─── Upload File to Cloudflare R2 ────────────────────────────────
+  // ─── Upload File to Cloudflare R2 (presigned URL flow) ───────────
+  //
+  //  Phase 1 — POST JSON { key, contentType } to /api/upload
+  //            Server validates JWT, returns { presignedUrl, publicUrl }
+  //            R2 credentials NEVER reach the browser.
+  //
+  //  Phase 2 — XHR PUT the raw file bytes directly to the presigned URL
+  //            Bypasses Vercel 4.5 MB body limit; progress events still work.
+  //
+  //  Phase 3 — Insert metadata row into Supabase files table.
+  //
   const uploadFile = async ({ file, title, description, category }) => {
     // Validate (size + presence only — all extensions accepted)
     const validation = validateFile(file)
@@ -46,55 +56,60 @@ export const useAdmin = () => {
     try {
       const ext = file.name.includes('.') ? file.name.split('.').pop().toLowerCase() : ''
       const safeFilename = generateSafeFilename(file.name)
+      const contentType = file.type || 'application/octet-stream'
 
-      // ── 1. Upload to R2 via Express proxy (XHR for progress events) ──
-      const publicUrl = await new Promise((resolve, reject) => {
-        const formData = new FormData()
-        formData.append('file', file)
-        formData.append('key', safeFilename)
+      // ── Phase 1: Request a presigned PUT URL from /api/upload ─────────────
+      const presignRes = await fetch(`${API_BASE}/api/upload`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({ key: safeFilename, contentType }),
+      })
 
+      if (!presignRes.ok) {
+        const body = await presignRes.json().catch(() => ({}))
+        throw new Error(body.error || `Failed to get upload URL (HTTP ${presignRes.status})`)
+      }
+
+      const { presignedUrl, publicUrl } = await presignRes.json()
+      setUploadProgress(5)
+
+      // ── Phase 2: PUT the raw file directly to R2 via presigned URL ────────
+      //            XHR is used so we can track upload progress.
+      await new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest()
 
         xhr.upload.addEventListener('progress', (e) => {
           if (e.lengthComputable) {
-            // Scale upload progress to 0–80%
-            const pct = Math.round((e.loaded / e.total) * 80)
+            // Scale 5 % → 85 % during the actual file transfer
+            const pct = 5 + Math.round((e.loaded / e.total) * 80)
             setUploadProgress(pct)
           }
         })
 
         xhr.addEventListener('load', () => {
+          // R2 returns 200 on success (presigned PUT)
           if (xhr.status >= 200 && xhr.status < 300) {
-            try {
-              const body = JSON.parse(xhr.responseText)
-              if (body.url) resolve(body.url)
-              else reject(new Error(body.error || 'Upload failed — no URL returned'))
-            } catch {
-              reject(new Error('Invalid response from upload server'))
-            }
+            resolve()
           } else {
-            try {
-              const body = JSON.parse(xhr.responseText)
-              reject(new Error(body.error || `Upload failed (HTTP ${xhr.status})`))
-            } catch {
-              reject(new Error(`Upload failed (HTTP ${xhr.status})`))
-            }
+            reject(new Error(`Upload to storage failed (HTTP ${xhr.status})`))
           }
         })
 
         xhr.addEventListener('error', () => reject(new Error('Network error during upload')))
         xhr.addEventListener('abort', () => reject(new Error('Upload aborted')))
 
-        xhr.open('POST', `${API_BASE}/api/upload`)
-        if (token) {
-          xhr.setRequestHeader('Authorization', `Bearer ${token}`)
-        }
-        xhr.send(formData)
+        xhr.open('PUT', presignedUrl)
+        // Content-Type must match what was used to sign the URL
+        xhr.setRequestHeader('Content-Type', contentType)
+        xhr.send(file)   // send raw File, not FormData
       })
 
-      setUploadProgress(85)
+      setUploadProgress(90)
 
-      // ── 2. Save metadata + R2 URL to Supabase DB ─────────────────────
+      // ── Phase 3: Save metadata + R2 public URL to Supabase ───────────────
       const { data: dbData, error: dbError } = await supabase.from('files').insert({
         title: sanitizeString(title || file.name),
         description: sanitizeString(description || ''),
@@ -103,7 +118,7 @@ export const useAdmin = () => {
         file_name: safeFilename,
         file_url: publicUrl,
         file_extension: ext,
-        mime_type: file.type || 'application/octet-stream',
+        mime_type: contentType,
         file_size: file.size,
         uploaded_by: (await supabase.auth.getUser()).data?.user?.email || 'admin',
         downloads: 0,

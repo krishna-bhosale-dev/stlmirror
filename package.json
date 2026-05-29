@@ -11,9 +11,9 @@
     "lint": "eslint .",
     "preview": "vite preview"
   },
-
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1056.0",
+    "@aws-sdk/s3-request-presigner": "^3.1056.0",
     "@supabase/supabase-js": "^2.106.2",
     "concurrently": "^10.0.0",
     "cors": "^2.8.6",
