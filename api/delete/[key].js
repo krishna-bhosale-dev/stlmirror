@@ -50,16 +50,23 @@ async function requireAdmin (req) {
   return { user, error: null, status: 200 }
 }
 
+// ─── CORS helper — applied to every response, including errors ────────────────
+function setCors (res) {
+  res.setHeader('Access-Control-Allow-Credentials', 'true')
+  res.setHeader('Access-Control-Allow-Origin', '*')
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+}
+
 // ─── Handler ──────────────────────────────────────────────────────────────────
 // Handles: DELETE /api/delete/:key
 // Vercel dynamic segment: req.query.key
 export default async function handler (req, res) {
-  res.setHeader('Access-Control-Allow-Credentials', 'true')
-  res.setHeader('Access-Control-Allow-Origin', '*')
-  res.setHeader('Access-Control-Allow-Methods', 'DELETE, OPTIONS')
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+  setCors(res)
 
-  if (req.method === 'OPTIONS') return res.status(200).end()
+  // Handle preflight — must return 204 with no body
+  if (req.method === 'OPTIONS') return res.status(204).end()
+
   if (req.method !== 'DELETE') {
     return res.status(405).json({ error: 'Method not allowed' })
   }
