@@ -127,15 +127,22 @@ body {
   transform: translateY(-3px);
 }
 
-/* ─── Gradient Button ────────────────────────────────────────────── */
+/* ─── Gradient Button ───────────────────────────────────────────────────────────────── */
 .btn-primary {
   background: var(--accent-gradient);
   color: white;
   border-radius: 10px;
   font-weight: 600;
+  cursor: pointer;          /* always show hand cursor */
   transition: all 0.2s ease;
   position: relative;
   overflow: hidden;
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;      /* show blocked cursor when disabled */
+  pointer-events: none;     /* prevent any click events leaking through */
 }
 
 .btn-primary::before {
@@ -147,11 +154,11 @@ body {
   transition: opacity 0.2s;
 }
 
-.btn-primary:hover::before {
+.btn-primary:hover:not(:disabled)::before {
   opacity: 1;
 }
 
-.btn-primary:active {
+.btn-primary:active:not(:disabled) {
   transform: scale(0.98);
 }
 

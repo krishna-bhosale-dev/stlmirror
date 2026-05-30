@@ -24,10 +24,13 @@ function getR2 () {
 
 function getSupabase () {
   if (!supabase) {
-    supabase = createClient(
-      process.env.VITE_SUPABASE_URL,
-      process.env.VITE_SUPABASE_ANON_KEY,
-    )
+    // Prefer plain names (server-side convention), fall back to VITE_ prefix
+    const url = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL
+    const key = process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY
+    if (!url || !key) {
+      console.error('Missing Supabase env vars (SUPABASE_URL / SUPABASE_ANON_KEY)')
+    }
+    supabase = createClient(url, key)
   }
   return supabase
 }

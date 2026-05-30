@@ -139,7 +139,7 @@ const UploadForm = ({ onUpload, uploading, uploadProgress }) => {
         </div>
 
         <button type="submit" id="upload-submit-btn" disabled={uploading || !file}
-          className="btn-primary w-full flex items-center justify-center gap-2 py-3.5 text-sm disabled:opacity-50">
+          className="btn-primary w-full flex items-center justify-center gap-2 py-3.5 text-sm">
           {uploading
             ? <><Loader2 className="w-4 h-4 spinner" />Uploading…</>
             : <><Upload className="w-4 h-4" />Upload File</>
