@@ -4,6 +4,14 @@ import { createClient } from '@supabase/supabase-js'
 // ─── Admin email list ─────────────────────────────────────────────────────────
 const ADMIN_EMAILS = ['krishnabhosale265@gmail.com', 'bgmloverhub@gmail.com']
 
+// ─── Allowed origins ─────────────────────────────────────────────────────────
+const ALLOWED_ORIGINS = [
+  'https://www.stlmirror.in',
+  'https://stlmirror.in',
+  'http://localhost:5173',
+  'http://localhost:3000',
+]
+
 // ─── Lazy-initialised singletons ─────────────────────────────────────────────
 let r2
 let supabase
@@ -54,18 +62,24 @@ async function requireAdmin (req) {
 }
 
 // ─── CORS helper — applied to every response, including errors ────────────────
-function setCors (res) {
+function setCors (req, res) {
+  const origin = req.headers.origin
+  if (origin && ALLOWED_ORIGINS.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin)
+  } else {
+    res.setHeader('Access-Control-Allow-Origin', 'https://www.stlmirror.in')
+  }
   res.setHeader('Access-Control-Allow-Credentials', 'true')
-  res.setHeader('Access-Control-Allow-Origin', '*')
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+  res.setHeader('Vary', 'Origin')
 }
 
 // ─── Handler ──────────────────────────────────────────────────────────────────
 // Handles: DELETE /api/delete/:key
 // Vercel dynamic segment: req.query.key
 export default async function handler (req, res) {
-  setCors(res)
+  setCors(req, res)
 
   // Handle preflight — must return 204 with no body
   if (req.method === 'OPTIONS') return res.status(204).end()

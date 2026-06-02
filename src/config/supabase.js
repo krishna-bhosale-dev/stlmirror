@@ -1,5 +1,8 @@
 import { createClient } from '@supabase/supabase-js'
 
+// ─── Production domain ────────────────────────────────────────────────────────
+export const SITE_URL = 'https://www.stlmirror.in'
+
 // ─── Supabase Configuration ──────────────────────────────────────────────────
 const rawUrl = (import.meta.env.VITE_SUPABASE_URL || '').trim()
 export const SUPABASE_URL = rawUrl ? new URL(rawUrl).origin : ''

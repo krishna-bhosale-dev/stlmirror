@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Block admin routes from indexing
+Disallow: /secure-admin-upload
+Disallow: /secure-admin-upload/login
+Disallow: /unauthorized
+
+Sitemap: https://www.stlmirror.in/sitemap.xml
