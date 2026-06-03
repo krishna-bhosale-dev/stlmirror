@@ -32,7 +32,7 @@ export const useFiles = () => {
       // Search
       if (searchQuery.trim()) {
         query = query.or(
-          `title.ilike.%${searchQuery}%,category.ilike.%${searchQuery}%,file_extension.ilike.%${searchQuery}%`
+          `title.ilike.%${searchQuery}%,description.ilike.%${searchQuery}%,category.ilike.%${searchQuery}%`
         )
       }
 

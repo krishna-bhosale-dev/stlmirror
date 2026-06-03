@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS public.files (
   original_filename text NOT NULL,
   file_name text NOT NULL UNIQUE,
   file_url text NOT NULL,
+  thumbnail_url text,
   file_extension text,
   mime_type text,
   file_size bigint NOT NULL,

@@ -10,6 +10,8 @@ import {
   formatDownloads,
   isImage,
 } from '../../utils/formatters'
+import Badge from '../common/Badge'
+import { getFallbackImage, handleImageError } from '../../utils/fallbackImages'
 
 import React from 'react'
 // Defined outside the component so ESLint doesn't flag it as "created during render"
@@ -21,7 +23,9 @@ const FileCard = ({ file, onDownload }) => {
   const [imgError, setImgError] = useState(false)
   const ext = (file.file_extension || '').toLowerCase()
   const extColor = getExtensionColor(ext)
-  const showThumbnail = isImage(ext) && file.file_url && !imgError
+  const hasUploadedThumb = !!file.thumbnail_url
+  const isImageFile = isImage(ext) && file.file_url
+  const showThumbnail = hasUploadedThumb || isImageFile || true // We now ALWAYS show a thumbnail (fallback)
 
   const handleDownload = (e) => {
     e.preventDefault()
@@ -52,11 +56,11 @@ const FileCard = ({ file, onDownload }) => {
           <div className="relative h-48 overflow-hidden bg-[var(--bg-secondary)] flex items-center justify-center">
             {showThumbnail ? (
               <img
-                src={file.file_url}
+                src={file.thumbnail_url || (isImageFile ? file.file_url : getFallbackImage(file.category))}
                 alt={file.title}
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                 loading="lazy"
-                onError={() => setImgError(true)}
+                onError={(e) => handleImageError(e, file.category)}
               />
             ) : (
               <div className="flex flex-col items-center gap-3">
@@ -80,9 +84,9 @@ const FileCard = ({ file, onDownload }) => {
 
           {/* Card body */}
           <div className="p-4 space-y-3">
-            {/* Extension badge + date */}
+            {/* Category badge + date */}
             <div className="flex items-center justify-between">
-              <span className={`ext-badge ${extColor}`}>.{ext}</span>
+              <Badge category={file.category} size="xs">{file.category}</Badge>
               <span className="flex items-center gap-1 text-xs text-[var(--text-muted)]">
                 <Calendar className="w-3 h-3" />
                 {formatRelativeDate(file.created_at)}
@@ -93,6 +97,13 @@ const FileCard = ({ file, onDownload }) => {
             <h3 className="font-semibold text-[var(--text-primary)] text-sm leading-snug line-clamp-2 group-hover:text-[var(--accent-primary)] transition-colors">
               {file.title || file.original_filename}
             </h3>
+
+            {/* Description Excerpt */}
+            {file.description && (
+              <p className="text-xs text-[var(--text-secondary)] line-clamp-2 leading-relaxed">
+                {file.description}
+              </p>
+            )}
 
             {/* Stats + Download */}
             <div className="flex items-center justify-between pt-1">

@@ -42,7 +42,7 @@ export const useAdmin = () => {
   //
   //  Phase 3 — Insert metadata row into Supabase files table.
   //
-  const uploadFile = async ({ file, title, description, category }) => {
+  const uploadFile = async ({ file, title, description, category, thumbnailFile }) => {
     // Validate (size + presence only — all extensions accepted)
     const validation = validateFile(file)
     if (!validation.valid) {
@@ -109,6 +109,40 @@ export const useAdmin = () => {
 
       setUploadProgress(90)
 
+      // ── Phase 2.5: Upload Thumbnail if provided ───────────────────
+      let thumbnailPublicUrl = null
+      if (thumbnailFile) {
+        const safeThumbName = `thumb_${Date.now()}_${generateSafeFilename(thumbnailFile.name)}`
+        const thumbContentType = thumbnailFile.type || 'image/jpeg'
+
+        const thumbPresignRes = await fetch(`${API_BASE}/api/upload`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
+          body: JSON.stringify({ key: safeThumbName, contentType: thumbContentType }),
+        })
+
+        if (thumbPresignRes.ok) {
+          const { presignedUrl: tPresignedUrl, publicUrl: tPublicUrl } = await thumbPresignRes.json()
+          
+          await new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest()
+            xhr.addEventListener('load', () => {
+              if (xhr.status >= 200 && xhr.status < 300) resolve()
+              else reject(new Error('Thumbnail upload failed'))
+            })
+            xhr.addEventListener('error', () => reject(new Error('Network error during thumbnail upload')))
+            xhr.addEventListener('abort', () => reject(new Error('Thumbnail upload aborted')))
+            xhr.open('PUT', tPresignedUrl)
+            xhr.setRequestHeader('Content-Type', thumbContentType)
+            xhr.send(thumbnailFile)
+          })
+          thumbnailPublicUrl = tPublicUrl
+        }
+      }
+
       // ── Phase 3: Save metadata + R2 public URL to Supabase ───────────────
       const { data: dbData, error: dbError } = await supabase.from('files').insert({
         title: sanitizeString(title || file.name),
@@ -117,6 +151,7 @@ export const useAdmin = () => {
         original_filename: file.name,
         file_name: safeFilename,
         file_url: publicUrl,
+        thumbnail_url: thumbnailPublicUrl,
         file_extension: ext,
         mime_type: contentType,
         file_size: file.size,

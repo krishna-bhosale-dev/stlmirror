@@ -31,9 +31,9 @@ const FileGrid = ({ files, loading, hasMore, onLoadMore, onDownload, error }) =>
         <div className="p-5 rounded-2xl bg-[var(--bg-secondary)] border border-[var(--border-glass)]">
           <FolderOpen className="w-12 h-12 text-[var(--text-muted)]" />
         </div>
-        <p className="text-[var(--text-primary)] font-semibold text-xl">No files found</p>
+        <p className="text-[var(--text-primary)] font-semibold text-xl">No files found matching your search.</p>
         <p className="text-[var(--text-muted)] text-sm max-w-sm">
-          Try adjusting your search query or filters. New files are added daily!
+          Try adjusting your search query or filters.
         </p>
       </div>
     )

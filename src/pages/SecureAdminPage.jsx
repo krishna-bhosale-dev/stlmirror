@@ -15,6 +15,7 @@ import { formatFileSize, formatDate, getExtensionColor } from '../utils/formatte
 // ─── Upload Form ──────────────────────────────────────────────────────────────
 const UploadForm = ({ onUpload, uploading, uploadProgress }) => {
   const [file, setFile] = useState(null)
+  const [thumbnailFile, setThumbnailFile] = useState(null)
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [category, setCategory] = useState('')
@@ -34,10 +35,10 @@ const UploadForm = ({ onUpload, uploading, uploadProgress }) => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     if (!file) return toast.error('Please select a file')
-    const res = await onUpload({ file, title, description, category })
+    const res = await onUpload({ file, title, description, category, thumbnailFile })
     if (res.success) {
       toast.success(`"${title || file.name}" uploaded successfully!`)
-      setFile(null); setTitle(''); setDescription(''); setCategory('')
+      setFile(null); setThumbnailFile(null); setTitle(''); setDescription(''); setCategory('')
     } else {
       toast.error(res.error || 'Upload failed')
     }
@@ -120,10 +121,19 @@ const UploadForm = ({ onUpload, uploading, uploadProgress }) => {
 
         {/* Description */}
         <div className="space-y-1.5">
-          <label className="text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>Description</label>
+          <label className="text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>Description *</label>
           <textarea id="upload-description" value={description} onChange={(e) => setDescription(e.target.value)}
-            placeholder="Brief description of the file…" rows={3}
+            placeholder="Brief description of the file…" rows={4} required maxLength={1500}
             className="input-base w-full px-4 py-2.5 text-sm resize-none" />
+        </div>
+
+        {/* Thumbnail Upload */}
+        <div className="space-y-1.5">
+          <label className="text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>Thumbnail Image (Optional)</label>
+          <input type="file" accept="image/jpeg, image/png, image/webp" 
+            onChange={(e) => setThumbnailFile(e.target.files?.[0] || null)}
+            className="input-base w-full px-4 py-2 text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-[var(--accent-glow)] file:text-[var(--accent-primary)] hover:file:bg-[var(--bg-secondary)]" />
+          {thumbnailFile && <p className="text-xs" style={{ color: 'var(--accent-primary)' }}>Selected: {thumbnailFile.name}</p>}
         </div>
 
         {/* Category */}
