@@ -7,6 +7,7 @@ import SEOHead from '../../components/seo/SEOHead'
 import Breadcrumb from '../../components/common/Breadcrumb'
 import Badge from '../../components/common/Badge'
 import Pagination from '../../components/common/Pagination'
+import { getFallbackImage, handleImageError } from '../../utils/fallbackImages'
 
 const POSTS_PER_PAGE = 6
 
@@ -19,20 +20,16 @@ const PostCard = ({ post, featured = false }) => (
     {/* Thumbnail */}
     <div
       className={`w-full ${featured ? 'h-52 sm:h-64' : 'h-44'} relative overflow-hidden`}
-      style={!post.thumbnail ? { background: 'linear-gradient(135deg, rgba(139,92,246,0.15), rgba(6,182,212,0.1))' } : {}}
     >
-      {post.thumbnail ? (
-        <img
-          src={post.thumbnail}
-          alt={post.title}
-          loading="lazy"
-          decoding="async"
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-          style={{ display: 'block' }}
-        />
-      ) : (
-        <BookOpen className="w-10 h-10 opacity-20 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" style={{ color: 'var(--accent-primary)' }} />
-      )}
+      <img
+        src={post.thumbnail || getFallbackImage(post.category)}
+        alt={post.title}
+        loading="lazy"
+        decoding="async"
+        onError={(e) => handleImageError(e, post.category)}
+        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+        style={{ display: 'block' }}
+      />
       <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-card)] via-transparent to-transparent" />
     </div>
 
@@ -175,15 +172,11 @@ const BlogListPage = () => {
               </div>
               <Link to={`/blog/${featuredPost.slug}`} className="block">
                 <div className="card group overflow-hidden sm:flex">
-                  <div className="sm:w-2/5 h-52 sm:h-auto relative overflow-hidden flex-shrink-0"
-                    style={!featuredPost.thumbnail ? { background: 'linear-gradient(135deg, rgba(139,92,246,0.2), rgba(6,182,212,0.15))' } : {}}>
-                    {featuredPost.thumbnail ? (
-                      <img src={featuredPost.thumbnail} alt={featuredPost.title}
-                        loading="lazy" decoding="async"
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
-                    ) : (
-                      <BookOpen className="w-16 h-16 opacity-30 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" style={{ color: 'var(--accent-primary)' }} />
-                    )}
+                  <div className="sm:w-2/5 h-52 sm:h-auto relative overflow-hidden flex-shrink-0">
+                    <img src={featuredPost.thumbnail || getFallbackImage(featuredPost.category)} alt={featuredPost.title}
+                      loading="lazy" decoding="async"
+                      onError={(e) => handleImageError(e, featuredPost.category)}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
                   </div>
                   <div className="p-6 sm:w-3/5 flex flex-col justify-between">
                     <div>

@@ -6,13 +6,20 @@ import SEOHead from '../../components/seo/SEOHead'
 import Breadcrumb from '../../components/common/Breadcrumb'
 import Badge from '../../components/common/Badge'
 import AuthorBox from '../../components/blog/AuthorBox'
+import { getFallbackImage, handleImageError } from '../../utils/fallbackImages'
 
 const RelatedPostCard = ({ post }) => (
   <Link to={`/blog/${post.slug}`}
     className="card group flex gap-3 p-4 overflow-hidden">
-    <div className="w-14 h-14 flex-shrink-0 rounded-xl flex items-center justify-center"
+    <div className="w-14 h-14 flex-shrink-0 rounded-xl overflow-hidden relative"
       style={{ background: 'linear-gradient(135deg, rgba(139,92,246,0.15), rgba(6,182,212,0.1))' }}>
-      <BookOpen className="w-5 h-5 opacity-40" style={{ color: 'var(--accent-primary)' }} />
+      <img
+        src={post.thumbnail || getFallbackImage(post.category)}
+        alt={post.title}
+        loading="lazy"
+        onError={(e) => handleImageError(e, post.category)}
+        className="w-full h-full object-cover"
+      />
     </div>
     <div className="flex-1 min-w-0">
       <Badge category={post.category} size="xs">{post.category}</Badge>
@@ -137,22 +144,16 @@ const BlogPostPage = () => {
             {/* Article */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
               {/* Thumbnail */}
-              {post.thumbnail ? (
-                <div className="w-full h-52 sm:h-72 rounded-2xl mb-8 overflow-hidden" style={{ border: '1px solid var(--border-glass)' }}>
-                  <img
-                    src={post.thumbnail}
-                    alt={post.title}
-                    loading="eager"
-                    decoding="async"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              ) : (
-                <div className="w-full h-52 sm:h-64 rounded-2xl mb-8 flex items-center justify-center overflow-hidden"
-                  style={{ background: 'linear-gradient(135deg, rgba(139,92,246,0.15), rgba(6,182,212,0.1))', border: '1px solid var(--border-glass)' }}>
-                  <BookOpen className="w-16 h-16 opacity-20" style={{ color: 'var(--accent-primary)' }} />
-                </div>
-              )}
+              <div className="w-full h-52 sm:h-72 rounded-2xl mb-8 overflow-hidden relative" style={{ border: '1px solid var(--border-glass)' }}>
+                <img
+                  src={post.thumbnail || getFallbackImage(post.category)}
+                  alt={post.title}
+                  loading="eager"
+                  decoding="async"
+                  onError={(e) => handleImageError(e, post.category)}
+                  className="w-full h-full object-cover"
+                />
+              </div>
 
               {/* Article Content */}
               <article
