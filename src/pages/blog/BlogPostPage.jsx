@@ -35,6 +35,8 @@ const BlogPostPage = () => {
     .filter(p => p.category === post.category && p.slug !== post.slug)
     .slice(0, 3)
 
+  const ogImage = post.thumbnail || 'https://www.stlmirror.in/og-image.png'
+
   const structuredData = {
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -50,7 +52,7 @@ const BlogPostPage = () => {
       logo: { '@type': 'ImageObject', url: 'https://www.stlmirror.in/og-image.png' },
     },
     mainEntityOfPage: { '@type': 'WebPage', '@id': `https://www.stlmirror.in/blog/${post.slug}` },
-    image: 'https://www.stlmirror.in/og-image.png',
+    image: ogImage,
   }
 
   const breadcrumbSchema = {
@@ -78,6 +80,7 @@ const BlogPostPage = () => {
         description={post.excerpt}
         canonical={`/blog/${post.slug}`}
         ogType="article"
+        ogImage={ogImage}
         structuredData={[structuredData, breadcrumbSchema]}
       />
 
@@ -134,10 +137,22 @@ const BlogPostPage = () => {
             {/* Article */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
               {/* Thumbnail */}
-              <div className="w-full h-52 sm:h-64 rounded-2xl mb-8 flex items-center justify-center overflow-hidden"
-                style={{ background: 'linear-gradient(135deg, rgba(139,92,246,0.15), rgba(6,182,212,0.1))', border: '1px solid var(--border-glass)' }}>
-                <BookOpen className="w-16 h-16 opacity-20" style={{ color: 'var(--accent-primary)' }} />
-              </div>
+              {post.thumbnail ? (
+                <div className="w-full h-52 sm:h-72 rounded-2xl mb-8 overflow-hidden" style={{ border: '1px solid var(--border-glass)' }}>
+                  <img
+                    src={post.thumbnail}
+                    alt={post.title}
+                    loading="eager"
+                    decoding="async"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              ) : (
+                <div className="w-full h-52 sm:h-64 rounded-2xl mb-8 flex items-center justify-center overflow-hidden"
+                  style={{ background: 'linear-gradient(135deg, rgba(139,92,246,0.15), rgba(6,182,212,0.1))', border: '1px solid var(--border-glass)' }}>
+                  <BookOpen className="w-16 h-16 opacity-20" style={{ color: 'var(--accent-primary)' }} />
+                </div>
+              )}
 
               {/* Article Content */}
               <article

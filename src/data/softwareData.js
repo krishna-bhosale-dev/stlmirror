@@ -31,11 +31,7 @@ export const softwareList = [
       'Gamepad support',
       'High FPS mode (60/120/240)',
     ],
-    screenshots: [
-      'https://via.placeholder.com/800x450/1a1a2e/8b5cf6?text=BlueStacks+Home',
-      'https://via.placeholder.com/800x450/1a1a2e/06b6d4?text=BlueStacks+Gaming',
-      'https://via.placeholder.com/800x450/1a1a2e/22c55e?text=BlueStacks+Multi-Instance',
-    ],
+    screenshots: [],
     requirements: {
       os: 'Windows 7/8/10/11 (64-bit) or macOS Sierra+',
       cpu: 'Intel or AMD Processor',
@@ -97,10 +93,7 @@ export const softwareList = [
       'Synchronizer for controlling multiple instances',
       'Macro and script support',
     ],
-    screenshots: [
-      'https://via.placeholder.com/800x450/1a1a2e/3ddc84?text=LDPlayer+Home',
-      'https://via.placeholder.com/800x450/1a1a2e/fb923c?text=LDPlayer+Gaming',
-    ],
+    screenshots: [],
     requirements: {
       os: 'Windows 7/8/10/11 (64-bit)',
       cpu: 'Intel or AMD x86/x86_64 Processor',
@@ -157,9 +150,7 @@ export const softwareList = [
       'Screen recording built-in',
       'Virtual GPS location spoofing',
     ],
-    screenshots: [
-      'https://via.placeholder.com/800x450/1a1a2e/a78bfa?text=NoxPlayer+Interface',
-    ],
+    screenshots: [],
     requirements: {
       os: 'Windows XP/7/8/10/11 or macOS 10.9+',
       cpu: 'Intel or AMD x86/x86_64',
@@ -210,9 +201,7 @@ export const softwareList = [
       'Gamepad support',
       'Multi-instance',
     ],
-    screenshots: [
-      'https://via.placeholder.com/800x450/1a1a2e/22d3ee?text=MEmu+Interface',
-    ],
+    screenshots: [],
     requirements: {
       os: 'Windows XP/7/8/10 (32 or 64-bit)',
       cpu: 'Intel or AMD x86',
@@ -265,9 +254,7 @@ export const softwareList = [
       'Customizable via settings.txt',
       'Open source and ad-free',
     ],
-    screenshots: [
-      'https://via.placeholder.com/800x450/1a1a2e/f87171?text=SumatraPDF+Reader',
-    ],
+    screenshots: [],
     requirements: {
       os: 'Windows 7/8/10/11',
       cpu: 'Any modern CPU',
@@ -325,10 +312,7 @@ export const softwareList = [
       'Collaboration and commenting',
       'Cloud storage integration',
     ],
-    screenshots: [
-      'https://via.placeholder.com/800x450/1a1a2e/f87171?text=Foxit+Reader+Interface',
-      'https://via.placeholder.com/800x450/1a1a2e/fb923c?text=Foxit+Annotation+Tools',
-    ],
+    screenshots: [],
     requirements: {
       os: 'Windows 7/8/10/11 or macOS 10.13+',
       cpu: '1.3 GHz or faster',
@@ -382,9 +366,7 @@ export const softwareList = [
       'Print and share PDFs',
       'Protected View for secure document opening',
     ],
-    screenshots: [
-      'https://via.placeholder.com/800x450/1a1a2e/f87171?text=Acrobat+Reader+Interface',
-    ],
+    screenshots: [],
     requirements: {
       os: 'Windows 10/11 or macOS 10.15+',
       cpu: '1.5 GHz or faster',
@@ -439,9 +421,7 @@ export const softwareList = [
       'File manager with built-in browser',
       'Portable and installable versions',
     ],
-    screenshots: [
-      'https://via.placeholder.com/800x450/1a1a2e/a78bfa?text=7-Zip+File+Manager',
-    ],
+    screenshots: [],
     requirements: {
       os: 'Windows 7/8/10/11 (32 or 64-bit)',
       cpu: 'Any x86 or x64 processor',
@@ -500,10 +480,7 @@ export const softwareList = [
       'Remote development via SSH and WSL',
       'GitHub Copilot integration',
     ],
-    screenshots: [
-      'https://via.placeholder.com/800x450/1a1a2e/007acc?text=VS+Code+Editor',
-      'https://via.placeholder.com/800x450/1a1a2e/22d3ee?text=VS+Code+Extensions',
-    ],
+    screenshots: [],
     requirements: {
       os: 'Windows 7/8/10/11, macOS 10.13+, or Linux',
       cpu: '1.6 GHz or faster',
@@ -562,9 +539,7 @@ export const softwareList = [
       'Multi-track audio recording',
       'Browser source for overlays',
     ],
-    screenshots: [
-      'https://via.placeholder.com/800x450/1a1a2e/8b5cf6?text=OBS+Studio+Interface',
-    ],
+    screenshots: [],
     requirements: {
       os: 'Windows 10/11, macOS 12+, or Ubuntu 20.04+',
       cpu: 'Intel i5 or AMD Ryzen 5 (6th gen or newer recommended)',
@@ -623,9 +598,7 @@ export const softwareList = [
       'Two-factor authentication support',
       'Open source and publicly audited',
     ],
-    screenshots: [
-      'https://via.placeholder.com/800x450/1a1a2e/60a5fa?text=Bitwarden+Vault',
-    ],
+    screenshots: [],
     requirements: {
       os: 'Windows, macOS, Linux, iOS, Android',
       cpu: 'Any modern processor',
@@ -680,9 +653,7 @@ export const softwareList = [
       'Media conversion',
       'Playlist management',
     ],
-    screenshots: [
-      'https://via.placeholder.com/800x450/1a1a2e/fb923c?text=VLC+Media+Player',
-    ],
+    screenshots: [],
     requirements: {
       os: 'Windows XP+, macOS 10.10+, Linux, iOS, Android',
       cpu: 'Any modern processor',
