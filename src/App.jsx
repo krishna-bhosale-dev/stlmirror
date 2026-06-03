@@ -5,6 +5,8 @@ import { AuthProvider, useAuth } from './context/AuthContext'
 import { ThemeProvider } from './context/ThemeContext'
 import Navbar from './components/layout/Navbar'
 import Footer from './components/layout/Footer'
+
+// Existing pages
 import HomePage from './pages/HomePage'
 import FileDetailPage from './pages/FileDetailPage'
 import SecureAdminPage from './pages/SecureAdminPage'
@@ -12,12 +14,30 @@ import SecureAdminLoginPage from './pages/SecureAdminLoginPage'
 import UnauthorizedPage from './pages/UnauthorizedPage'
 import NotFoundPage from './pages/NotFoundPage'
 
+// Legal pages
+import AboutPage from './pages/legal/AboutPage'
+import ContactPage from './pages/legal/ContactPage'
+import PrivacyPolicyPage from './pages/legal/PrivacyPolicyPage'
+import TermsPage from './pages/legal/TermsPage'
+import DisclaimerPage from './pages/legal/DisclaimerPage'
+import DmcaPage from './pages/legal/DmcaPage'
+import EditorialPolicyPage from './pages/legal/EditorialPolicyPage'
+
+// Blog pages
+import BlogListPage from './pages/blog/BlogListPage'
+import BlogPostPage from './pages/blog/BlogPostPage'
+
+// Software pages
+import SoftwarePage from './pages/software/SoftwarePage'
+import ApkPage from './pages/software/ApkPage'
+import PdfToolsPage from './pages/software/PdfToolsPage'
+import DevToolsPage from './pages/software/DevToolsPage'
+import SoftwareDetailPage from './pages/software/SoftwareDetailPage'
+import LatestSoftwarePage from './pages/software/LatestSoftwarePage'
+import MostDownloadedPage from './pages/software/MostDownloadedPage'
+import RecentlyUpdatedPage from './pages/software/RecentlyUpdatedPage'
+
 // ─── Admin-Only Route Guard ───────────────────────────────────────────────────
-// Handles three states:
-//   1. Still loading auth session  → spinner
-//   2. Not logged in               → redirect to hidden login
-//   3. Logged in but wrong email   → unauthorized page
-//   4. Correct admin email         → render children
 const AdminRoute = ({ children }) => {
   const { user, isAdmin, loading } = useAuth()
 
@@ -45,8 +65,34 @@ const AppLayout = () => {
       <Navbar onSearch={handleSearch} searchQuery={globalSearch} />
       <main className="flex-1">
         <Routes>
+          {/* ── Core ── */}
           <Route path="/" element={<HomePage externalSearch={globalSearch} />} />
           <Route path="/file/:id" element={<FileDetailPage />} />
+
+          {/* ── Legal & Trust ── */}
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+          <Route path="/terms" element={<TermsPage />} />
+          <Route path="/disclaimer" element={<DisclaimerPage />} />
+          <Route path="/dmca" element={<DmcaPage />} />
+          <Route path="/editorial-policy" element={<EditorialPolicyPage />} />
+
+          {/* ── Blog ── */}
+          <Route path="/blog" element={<BlogListPage />} />
+          <Route path="/blog/:slug" element={<BlogPostPage />} />
+
+          {/* ── Software Directory ── */}
+          <Route path="/software" element={<SoftwarePage />} />
+          <Route path="/software/:slug" element={<SoftwareDetailPage />} />
+          <Route path="/apk" element={<ApkPage />} />
+          <Route path="/pdf-tools" element={<PdfToolsPage />} />
+          <Route path="/developer-tools" element={<DevToolsPage />} />
+          <Route path="/latest" element={<LatestSoftwarePage />} />
+          <Route path="/most-downloaded" element={<MostDownloadedPage />} />
+          <Route path="/recently-updated" element={<RecentlyUpdatedPage />} />
+
+          {/* ── 404 ── */}
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>
@@ -73,7 +119,7 @@ const App = () => (
           <Route path="/secure-admin-upload/login" element={<SecureAdminLoginPage />} />
           <Route path="/unauthorized" element={<UnauthorizedPage />} />
 
-          {/* ── Redirect old admin paths so they don't 404 ── */}
+          {/* ── Redirect old admin paths ── */}
           <Route path="/admin" element={<Navigate to="/secure-admin-upload" replace />} />
           <Route path="/admin/login" element={<Navigate to="/secure-admin-upload/login" replace />} />
 
