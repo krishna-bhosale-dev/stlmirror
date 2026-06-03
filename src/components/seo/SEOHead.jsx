@@ -73,7 +73,13 @@ const SEOHead = ({
         sdEl.type = 'application/ld+json'
         document.head.appendChild(sdEl)
       }
-      sdEl.textContent = JSON.stringify(structuredData)
+      
+      // If structuredData is an array, we render an array of schemas
+      if (Array.isArray(structuredData)) {
+        sdEl.textContent = JSON.stringify(structuredData)
+      } else {
+        sdEl.textContent = JSON.stringify(structuredData)
+      }
     } else if (sdEl) {
       sdEl.remove()
     }
