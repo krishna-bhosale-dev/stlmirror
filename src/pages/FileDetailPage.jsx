@@ -185,16 +185,7 @@ const FileDetailPage = () => {
                 <span className="ml-auto text-xs opacity-70">{formatFileSize(file.file_size)}</span>
               </button>
 
-              {/* Monetag Direct Link */}
-              <a
-                href="https://crn77.com/4/11096582"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-xl text-sm font-medium bg-[var(--bg-secondary)] border border-[var(--border-glass)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-[var(--accent-primary)] transition-all"
-              >
-                <ExternalLink className="w-4 h-4" />
-                Support STLMirror (Alternative Link)
-              </a>
+
             </div>
 
             {/* Share buttons */}
