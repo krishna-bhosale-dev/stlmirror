@@ -72,7 +72,7 @@ const ContactPage = () => {
                 { icon: Mail, title: 'Email', value: 'contact@stlmirror.in', sub: 'For general inquiries' },
                 { icon: MessageSquare, title: 'DMCA Requests', value: 'dmca@stlmirror.in', sub: 'For copyright concerns' },
                 { icon: Clock, title: 'Response Time', value: '24–48 hours', sub: 'Business days' },
-                { icon: MapPin, title: 'Corporate Address', value: 'Level 5, DLF Cyber City', sub: 'Gurugram, Haryana 122002, India' },
+                { icon: MapPin, title: 'Corporate Address', value: 'Satyam Residency, Loni Kalbhor', sub: 'Pune, Maharashtra, India' },
               ].map(item => (
                 <div key={item.title} className="p-4 rounded-xl" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-glass)' }}>
                   <div className="flex items-start gap-3">
