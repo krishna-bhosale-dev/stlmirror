@@ -889,7 +889,6 @@ export const aiToolsList = [
 <p>Ready to supercharge your development workflow? Download Cursor AI and see why developers are calling it the biggest leap forward since syntax highlighting.</p>
     `,
   }
-]
 ];
 
 export const getAiToolBySlug = (slug) => aiToolsList.find(t => t.slug === slug);

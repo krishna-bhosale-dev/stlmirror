@@ -27,6 +27,10 @@ import EditorialPolicyPage from './pages/legal/EditorialPolicyPage'
 import BlogListPage from './pages/blog/BlogListPage'
 import BlogPostPage from './pages/blog/BlogPostPage'
 
+// AI Tools pages
+import AiToolsPage from './pages/aitools/AiToolsPage'
+import AiToolDetailPage from './pages/aitools/AiToolDetailPage'
+
 // Software pages
 import SoftwarePage from './pages/software/SoftwarePage'
 import ApkPage from './pages/software/ApkPage'
