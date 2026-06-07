@@ -1,6 +1,6 @@
 import { useParams, Link, Navigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Clock, Calendar, ChevronRight, Share2, Sparkles } from 'lucide-react'
+import { Clock, Calendar, ChevronRight, Share2, Sparkles, ExternalLink, Globe, Code2, DollarSign, Zap } from 'lucide-react'
 import { getAiToolBySlug, aiToolsList } from '../../data/aiToolsData'
 import SEOHead from '../../components/seo/SEOHead'
 import Breadcrumb from '../../components/common/Breadcrumb'
@@ -49,7 +49,8 @@ const AiToolDetailPage = () => {
     applicationCategory: tool.category,
     description: tool.excerpt,
     datePublished: tool.date,
-    author: { '@type': 'Organization', name: 'STL Mirror Editorial Team', url: 'https://www.stlmirror.in/about' },
+    ...(tool.website ? { url: tool.website } : {}),
+    ...(tool.developer ? { author: { '@type': 'Organization', name: tool.developer } } : { author: { '@type': 'Organization', name: 'STL Mirror Editorial Team', url: 'https://www.stlmirror.in/about' } }),
     publisher: {
       '@type': 'Organization',
       name: 'STL Mirror',
@@ -124,6 +125,26 @@ const AiToolDetailPage = () => {
                   Share
                 </button>
               </div>
+
+              {/* Official Website CTA */}
+              {tool.website && (
+                <a
+                  href={tool.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  id={`visit-official-${tool.slug}`}
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all"
+                  style={{
+                    background: 'var(--accent-gradient)',
+                    color: 'white',
+                    boxShadow: '0 4px 20px rgba(139,92,246,0.3)',
+                  }}
+                >
+                  <Globe className="w-4 h-4" />
+                  Visit Official Website
+                  <ExternalLink className="w-3.5 h-3.5 opacity-80" />
+                </a>
+              )}
             </motion.div>
           </div>
         </section>
@@ -175,7 +196,88 @@ const AiToolDetailPage = () => {
 
             {/* Sidebar */}
             <aside className="space-y-6">
-              {/* Table of Contents stub */}
+
+              {/* Official Website Card */}
+              {tool.website && (
+                <div className="p-5 rounded-2xl" style={{ background: 'linear-gradient(135deg, rgba(139,92,246,0.08), rgba(6,182,212,0.05))', border: '1px solid rgba(139,92,246,0.2)' }}>
+                  <h3 className="font-bold text-sm mb-3 uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>
+                    Official Website
+                  </h3>
+                  <p className="text-xs mb-3 leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+                    Visit the official {tool.title.split(' ')[0]} website to access all features, pricing, documentation, and support resources.
+                  </p>
+                  <a
+                    href={tool.website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    id={`sidebar-official-${tool.slug}`}
+                    className="flex items-center gap-2 text-xs font-semibold mb-3 break-all"
+                    style={{ color: 'var(--accent-primary)' }}
+                  >
+                    <Globe className="w-3.5 h-3.5 flex-shrink-0" />
+                    {tool.website.replace('https://', '')}
+                  </a>
+                  <a
+                    href={tool.website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl text-xs font-semibold transition-all"
+                    style={{ background: 'var(--accent-gradient)', color: 'white' }}
+                  >
+                    <ExternalLink className="w-3.5 h-3.5" />
+                    Open Official Site
+                  </a>
+                </div>
+              )}
+
+              {/* Tool Metadata Card */}
+              {(tool.developer || tool.pricing || tool.primaryUse) && (
+                <div className="p-5 rounded-2xl" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-glass)' }}>
+                  <h3 className="font-bold text-sm mb-4 uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>
+                    Tool Info
+                  </h3>
+                  <div className="space-y-3">
+                    {tool.category && (
+                      <div className="flex items-start gap-2">
+                        <Zap className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" style={{ color: 'var(--accent-primary)' }} />
+                        <div>
+                          <p className="text-xs font-semibold" style={{ color: 'var(--text-muted)' }}>Category</p>
+                          <p className="text-xs" style={{ color: 'var(--text-primary)' }}>{tool.category}</p>
+                        </div>
+                      </div>
+                    )}
+                    {tool.developer && (
+                      <div className="flex items-start gap-2">
+                        <Code2 className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" style={{ color: 'var(--accent-primary)' }} />
+                        <div>
+                          <p className="text-xs font-semibold" style={{ color: 'var(--text-muted)' }}>Developer</p>
+                          <p className="text-xs" style={{ color: 'var(--text-primary)' }}>{tool.developer}</p>
+                        </div>
+                      </div>
+                    )}
+                    {tool.pricing && (
+                      <div className="flex items-start gap-2">
+                        <DollarSign className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" style={{ color: 'var(--accent-primary)' }} />
+                        <div>
+                          <p className="text-xs font-semibold" style={{ color: 'var(--text-muted)' }}>Pricing</p>
+                          <p className="text-xs" style={{ color: 'var(--text-primary)' }}>{tool.pricing}</p>
+                        </div>
+                      </div>
+                    )}
+                    {tool.primaryUse && (
+                      <div className="flex items-start gap-2">
+                        <Globe className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" style={{ color: 'var(--accent-primary)' }} />
+                        <div>
+                          <p className="text-xs font-semibold" style={{ color: 'var(--text-muted)' }}>Primary Use</p>
+                          <p className="text-xs" style={{ color: 'var(--text-primary)' }}>{tool.primaryUse}</p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Table of Contents */}
               <div className="p-5 rounded-2xl" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-glass)' }}>
                 <h3 className="font-bold text-sm mb-3 uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>
                   Review Sections
