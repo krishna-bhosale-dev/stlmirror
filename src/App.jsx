@@ -82,6 +82,10 @@ const AppLayout = () => {
           <Route path="/blog" element={<BlogListPage />} />
           <Route path="/blog/:slug" element={<BlogPostPage />} />
 
+          {/* ── AI Tools Directory ── */}
+          <Route path="/ai-tools" element={<AiToolsPage />} />
+          <Route path="/ai-tools/:slug" element={<AiToolDetailPage />} />
+
           {/* ── Software Directory ── */}
           <Route path="/software" element={<SoftwarePage />} />
           <Route path="/software/:slug" element={<SoftwareDetailPage />} />

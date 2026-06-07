@@ -169,6 +169,12 @@ const Navbar = ({ onSearch, searchQuery }) => {
                 Blog
               </Link>
 
+              <Link to="/ai-tools" id="nav-ai-tools"
+                className="px-3 py-2 rounded-xl text-sm font-medium transition-all"
+                style={isActive('/ai-tools') ? activeLinkStyle : navLinkStyle}>
+                AI Tools
+              </Link>
+
               {/* Categories Dropdown */}
               <Dropdown
                 label="Categories"
@@ -279,6 +285,7 @@ const Navbar = ({ onSearch, searchQuery }) => {
                   { label: 'Latest Software', href: '/latest' },
                   { label: 'Most Downloaded', href: '/most-downloaded' },
                   { label: 'Blog', href: '/blog' },
+                  { label: 'AI Tools', href: '/ai-tools' },
                   { label: 'About Us', href: '/about' },
                   { label: 'Contact', href: '/contact' },
                 ].map(item => (

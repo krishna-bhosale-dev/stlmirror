@@ -4217,7 +4217,6 @@ node index.js</code></pre>
 <p>Install Node.js via <strong>nvm</strong> or <strong>nvm-windows</strong> — it makes managing multiple versions effortless across projects. Once Node.js is installed, explore our <a href="/blog/flutter-development-guide-beginners">Flutter development guide</a> for mobile development with JavaScript-adjacent Dart, or our <a href="/blog/best-developer-utilities-windows">developer utilities guide</a> for the full Windows development setup.</p>
     `,
   },
-
 ]
 
 export const featuredPosts = blogPosts.filter(p => p.featured)
