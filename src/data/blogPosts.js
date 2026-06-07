@@ -4,6 +4,7 @@
  * Target: 800–1500+ words per article
  */
 
+/* eslint-disable no-useless-escape */
 export const blogPosts = [
   {
     id: 1,

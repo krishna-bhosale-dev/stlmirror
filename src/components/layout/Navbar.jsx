@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Sun, Moon, Search, Shield, Menu, X, Zap, LogOut,
-  ChevronDown, Smartphone, FileText, Code, BookOpen,
+  ChevronDown, Smartphone, FileText, Code,
   TrendingUp, Clock, RefreshCw, Cpu
 } from 'lucide-react'
 import { useTheme } from '../../context/ThemeContext'
@@ -73,6 +73,7 @@ const Navbar = ({ onSearch, searchQuery }) => {
   }, [])
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMobileOpen(false)
     setSoftwareOpen(false)
     setMoreOpen(false)

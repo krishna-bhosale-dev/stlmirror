@@ -1,6 +1,6 @@
 import { useParams, Link, Navigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Clock, Calendar, ChevronRight, Share2, Sparkles, ExternalLink } from 'lucide-react'
+import { Clock, Calendar, ChevronRight, Share2, Sparkles } from 'lucide-react'
 import { getAiToolBySlug, aiToolsList } from '../../data/aiToolsData'
 import SEOHead from '../../components/seo/SEOHead'
 import Breadcrumb from '../../components/common/Breadcrumb'

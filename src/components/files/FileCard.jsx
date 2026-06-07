@@ -1,9 +1,7 @@
-import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Download, Star, Calendar, HardDrive } from 'lucide-react'
 import {
-  getExtensionColor,
   getFileIconComponent,
   formatFileSize,
   formatRelativeDate,
@@ -20,9 +18,7 @@ const FileTypeIcon = ({ ext, ...props }) =>
   React.createElement(getFileIconComponent(ext), props)
 
 const FileCard = ({ file, onDownload }) => {
-  const [imgError, setImgError] = useState(false)
-  const ext = (file.file_extension || '').toLowerCase()
-  const extColor = getExtensionColor(ext)
+    const ext = (file.file_extension || '').toLowerCase()
   const hasUploadedThumb = !!file.thumbnail_url
   const isImageFile = isImage(ext) && file.file_url
   const showThumbnail = hasUploadedThumb || isImageFile || true // We now ALWAYS show a thumbnail (fallback)

@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Sparkles, Bot, BrainCircuit, Mic, PenTool, Video, Image as ImageIcon, Code, TrendingUp, ChevronRight, Search, Clock, Star } from 'lucide-react'
+import { Sparkles, Bot, BrainCircuit, Mic, PenTool, Video, Image as ImageIcon, Code, TrendingUp, ChevronRight, Search, Clock } from 'lucide-react'
 import { aiToolsList, aiToolsCategories } from '../../data/aiToolsData'
 import SEOHead from '../../components/seo/SEOHead'
 import Breadcrumb from '../../components/common/Breadcrumb'

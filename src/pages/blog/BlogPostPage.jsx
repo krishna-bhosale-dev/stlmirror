@@ -1,6 +1,6 @@
 import { useParams, Link, Navigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Clock, Calendar, ChevronRight, BookOpen, Share2 } from 'lucide-react'
+import { Clock, Calendar, ChevronRight, Share2 } from 'lucide-react'
 import { getPostBySlug, blogPosts } from '../../data/blogPosts'
 import SEOHead from '../../components/seo/SEOHead'
 import Breadcrumb from '../../components/common/Breadcrumb'
