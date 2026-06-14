@@ -136,6 +136,18 @@ const Navbar = ({ onSearch, searchQuery }) => {
                 Home
               </Link>
 
+              <Link to="/ai-tools" id="nav-ai-tools"
+                className="px-3 py-2 rounded-xl text-sm font-medium transition-all"
+                style={isActive('/ai-tools') ? activeLinkStyle : navLinkStyle}>
+                AI Tools
+              </Link>
+
+              <Link to="/blog" id="nav-blog"
+                className="px-3 py-2 rounded-xl text-sm font-medium transition-all"
+                style={isActive('/blog') ? activeLinkStyle : navLinkStyle}>
+                Blog
+              </Link>
+
               {/* Software Dropdown */}
               <Dropdown
                 label="Software"
@@ -163,18 +175,6 @@ const Navbar = ({ onSearch, searchQuery }) => {
                   ))}
                 </div>
               </Dropdown>
-
-              <Link to="/blog" id="nav-blog"
-                className="px-3 py-2 rounded-xl text-sm font-medium transition-all"
-                style={isActive('/blog') ? activeLinkStyle : navLinkStyle}>
-                Blog
-              </Link>
-
-              <Link to="/ai-tools" id="nav-ai-tools"
-                className="px-3 py-2 rounded-xl text-sm font-medium transition-all"
-                style={isActive('/ai-tools') ? activeLinkStyle : navLinkStyle}>
-                AI Tools
-              </Link>
 
               {/* Categories Dropdown */}
               <Dropdown
@@ -279,14 +279,14 @@ const Navbar = ({ onSearch, searchQuery }) => {
               <div className="px-4 py-4 space-y-1 max-h-[70vh] overflow-y-auto">
                 {[
                   { label: 'Home', href: '/' },
+                  { label: 'AI Tools', href: '/ai-tools' },
+                  { label: 'Blog', href: '/blog' },
                   { label: 'Software Hub', href: '/software' },
                   { label: 'Android APKs', href: '/apk' },
                   { label: 'PDF Tools', href: '/pdf-tools' },
                   { label: 'Developer Tools', href: '/developer-tools' },
                   { label: 'Latest Software', href: '/latest' },
                   { label: 'Most Downloaded', href: '/most-downloaded' },
-                  { label: 'Blog', href: '/blog' },
-                  { label: 'AI Tools', href: '/ai-tools' },
                   { label: 'About Us', href: '/about' },
                   { label: 'Contact', href: '/contact' },
                 ].map(item => (

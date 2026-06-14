@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Sparkles, Bot, BrainCircuit, Mic, PenTool, Video, Image as ImageIcon, Code, TrendingUp, ChevronRight, Search, Clock } from 'lucide-react'
+import { Sparkles, Bot, BrainCircuit, Mic, PenTool, Video, Image as ImageIcon, Code, TrendingUp, ChevronRight, Search, Clock, Star, Flame } from 'lucide-react'
 import { aiToolsList, aiToolsCategories } from '../../data/aiToolsData'
 import SEOHead from '../../components/seo/SEOHead'
 import Breadcrumb from '../../components/common/Breadcrumb'
@@ -38,7 +38,7 @@ const getCategoryColor = (cat) => {
   }
 }
 
-const ToolCard = ({ tool }) => (
+const ToolCard = ({ tool, badge }) => (
   <motion.article
     initial={{ opacity: 0, y: 16 }}
     animate={{ opacity: 1, y: 0 }}
@@ -55,6 +55,15 @@ const ToolCard = ({ tool }) => (
         style={{ display: 'block' }}
       />
       <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-card)] via-transparent to-transparent" />
+      {badge && (
+        <div className="absolute top-3 left-3">
+          <span className="flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold text-white shadow-lg"
+            style={{ background: badge === 'Featured' ? 'linear-gradient(135deg,#8b5cf6,#06b6d4)' : 'linear-gradient(135deg,#f43f5e,#f59e0b)' }}>
+            {badge === 'Featured' ? <Star className="w-3 h-3" /> : <Flame className="w-3 h-3" />}
+            {badge}
+          </span>
+        </div>
+      )}
     </div>
 
     <div className="p-5">
@@ -91,13 +100,16 @@ const ToolCard = ({ tool }) => (
   </motion.article>
 )
 
+// Sorted newest-first
+const sortedTools = [...aiToolsList].sort((a, b) => new Date(b.date) - new Date(a.date))
+
 const AiToolsPage = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [activeCategory, setActiveCategory] = useState('All')
   const [currentPage, setCurrentPage] = useState(1)
 
   const filtered = useMemo(() => {
-    let tools = aiToolsList
+    let tools = sortedTools
     if (activeCategory !== 'All') tools = tools.filter(t => t.category === activeCategory)
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase()
@@ -116,6 +128,14 @@ const AiToolsPage = () => {
   const handleCategory = (cat) => { setActiveCategory(cat); setCurrentPage(1) }
   const handleSearch = (q) => { setSearchQuery(q); setCurrentPage(1) }
 
+  const isFiltering = searchQuery.trim() !== '' || activeCategory !== 'All'
+
+  // Featured: tools with featured:true
+  const featuredTools = sortedTools.filter(t => t.featured).slice(0, 3)
+  // Trending: 3 newest tools not already in featured
+  const featuredIds = new Set(featuredTools.map(t => t.id))
+  const trendingTools = sortedTools.filter(t => !featuredIds.has(t.id)).slice(0, 3)
+
   const structuredData = {
     '@context': 'https://schema.org',
     '@type': 'CollectionPage',
@@ -127,7 +147,7 @@ const AiToolsPage = () => {
   return (
     <>
       <SEOHead
-        title="AI Tools Directory — Best AI Generators & Assistants"
+        title="AI Tools Directory — Best AI Generators & Assistants 2026"
         description="Discover the best AI tools for writing, coding, video generation, and productivity. Read our in-depth reviews and find the right AI for your workflow."
         canonical="/ai-tools"
         structuredData={structuredData}
@@ -163,36 +183,75 @@ const AiToolsPage = () => {
             </div>
           </div>
 
-          {/* Category Cards (only show if no search) */}
-          {!searchQuery && activeCategory === 'All' && (
-            <section className="mb-14">
-              <div className="flex items-center gap-3 mb-6">
-                <h2 className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>Browse by Discipline</h2>
-                <div className="flex-1 h-px" style={{ background: 'var(--border-glass)' }} />
-              </div>
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-                {aiToolsCategories.map(cat => {
-                  const Icon = getCategoryIcon(cat)
-                  const colors = getCategoryColor(cat)
-                  const count = aiToolsList.filter(t => t.category === cat).length
+          {/* Featured & Trending sections (only when not filtering) */}
+          {!isFiltering && (
+            <>
+              {/* Featured Tools */}
+              {featuredTools.length > 0 && (
+                <section className="mb-14">
+                  <div className="flex items-center gap-3 mb-6">
+                    <Star className="w-5 h-5" style={{ color: '#8b5cf6' }} />
+                    <h2 className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>Featured Tools</h2>
+                    <div className="flex-1 h-px" style={{ background: 'var(--border-glass)' }} />
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {featuredTools.map(tool => <ToolCard key={tool.id} tool={tool} badge="Featured" />)}
+                  </div>
+                </section>
+              )}
 
-                  return (
-                    <button key={cat} onClick={() => handleCategory(cat)}
-                      className="card group p-5 text-left flex flex-col transition-all hover:-translate-y-1">
-                      <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 transition-transform group-hover:scale-110"
-                        style={{ background: colors.bg }}>
-                        <Icon className="w-6 h-6" style={{ color: colors.color }} />
-                      </div>
-                      <h3 className="font-bold text-sm mb-1" style={{ color: 'var(--text-primary)' }}>{cat}</h3>
-                      <span className="text-xs font-medium" style={{ color: 'var(--text-muted)' }}>
-                        {count} Tools
-                      </span>
-                    </button>
-                  )
-                })}
-              </div>
-            </section>
+              {/* Trending Tools */}
+              {trendingTools.length > 0 && (
+                <section className="mb-14">
+                  <div className="flex items-center gap-3 mb-6">
+                    <Flame className="w-5 h-5" style={{ color: '#f43f5e' }} />
+                    <h2 className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>Trending Now</h2>
+                    <div className="flex-1 h-px" style={{ background: 'var(--border-glass)' }} />
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {trendingTools.map(tool => <ToolCard key={tool.id} tool={tool} badge="Trending" />)}
+                  </div>
+                </section>
+              )}
+
+              {/* Category Cards */}
+              <section className="mb-14">
+                <div className="flex items-center gap-3 mb-6">
+                  <h2 className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>Browse by Discipline</h2>
+                  <div className="flex-1 h-px" style={{ background: 'var(--border-glass)' }} />
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                  {aiToolsCategories.map(cat => {
+                    const Icon = getCategoryIcon(cat)
+                    const colors = getCategoryColor(cat)
+                    const count = aiToolsList.filter(t => t.category === cat).length
+
+                    return (
+                      <button key={cat} onClick={() => handleCategory(cat)}
+                        className="card group p-5 text-left flex flex-col transition-all hover:-translate-y-1">
+                        <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-4 transition-transform group-hover:scale-110"
+                          style={{ background: colors.bg }}>
+                          <Icon className="w-6 h-6" style={{ color: colors.color }} />
+                        </div>
+                        <h3 className="font-bold text-sm mb-1" style={{ color: 'var(--text-primary)' }}>{cat}</h3>
+                        <span className="text-xs font-medium" style={{ color: 'var(--text-muted)' }}>
+                          {count} Tools
+                        </span>
+                      </button>
+                    )
+                  })}
+                </div>
+              </section>
+            </>
           )}
+
+          {/* All Tools header */}
+          <div className="flex items-center gap-3 mb-6">
+            <h2 className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>
+              {isFiltering ? 'Search Results' : 'All AI Tools'}
+            </h2>
+            <div className="flex-1 h-px" style={{ background: 'var(--border-glass)' }} />
+          </div>
 
           {/* Category Pills Filter */}
           <div className="flex flex-wrap items-center gap-2 mb-8">
@@ -246,3 +305,4 @@ const AiToolsPage = () => {
 }
 
 export default AiToolsPage
+
