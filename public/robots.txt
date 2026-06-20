@@ -8,7 +8,11 @@ Disallow: /unauthorized
 
 # Allow all public routes
 Allow: /blog
+Allow: /blog/
+Allow: /ai-tools
+Allow: /ai-tools/
 Allow: /software
+Allow: /software/
 Allow: /apk
 Allow: /pdf-tools
 Allow: /developer-tools
@@ -16,6 +20,7 @@ Allow: /latest
 Allow: /most-downloaded
 Allow: /recently-updated
 Allow: /about
+Allow: /author
 Allow: /contact
 Allow: /privacy-policy
 Allow: /terms

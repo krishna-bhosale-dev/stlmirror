@@ -113,22 +113,39 @@ const AboutPage = () => (
         </Section>
 
         {/* Author Team */}
-        <Section icon={Heart} title="Our Team">
+        <Section icon={Heart} title="Meet the Founder">
           <p className="mb-6 leading-relaxed">
-            STL Mirror is maintained by a dedicated editorial team of software enthusiasts, developers, and technical writers based across India. We are passionate about technology and committed to sharing knowledge that genuinely helps people.
+            STL Mirror was founded and is led by <strong style={{ color: 'var(--text-primary)' }}>Krishna Bhosale</strong>, a software engineering student at Vishwakarma Institute of Technology (VIT), Pune. Every review, guide, and tutorial published on STL Mirror is personally tested before being written — not summarised from vendor marketing materials.
           </p>
           <div className="p-5 rounded-xl" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-glass)' }}>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 mb-4">
               <div className="w-14 h-14 rounded-xl flex items-center justify-center font-bold text-xl"
-                style={{ background: 'var(--accent-gradient)', color: 'white' }}>S</div>
+                style={{ background: 'var(--accent-gradient)', color: 'white' }}>K</div>
               <div>
-                <p className="font-bold" style={{ color: 'var(--text-primary)' }}>STL Mirror Editorial Team</p>
-                <p className="text-sm" style={{ color: 'var(--accent-primary)' }}>Software Researchers & Tech Writers</p>
-                <p className="text-sm mt-1" style={{ color: 'var(--text-muted)' }}>Testing software and writing guides since 2023</p>
+                <p className="font-bold" style={{ color: 'var(--text-primary)' }}>Krishna Bhosale</p>
+                <p className="text-sm" style={{ color: 'var(--accent-primary)' }}>Founder & Lead Editor, STL Mirror</p>
+                <p className="text-sm mt-0.5" style={{ color: 'var(--text-muted)' }}>Software Engineering Student · VIT Pune</p>
               </div>
             </div>
+            <p className="text-sm leading-relaxed mb-4" style={{ color: 'var(--text-secondary)' }}>
+              Krishna specialises in AI tools evaluation, software development (React, JavaScript, Android), and cybersecurity. He founded STL Mirror in 2023 with a focus on technically honest reviews for students and developers — particularly those in India who need reliable, budget-conscious software guidance.
+            </p>
+            <div className="flex flex-wrap gap-2 mb-4">
+              {['AI Tools', 'Software Development', 'Android & APK', 'Cybersecurity', 'Technical Writing'].map(tag => (
+                <span key={tag} className="text-xs px-2.5 py-1 rounded-full"
+                  style={{ background: 'rgba(139,92,246,0.1)', color: 'var(--accent-primary)', border: '1px solid rgba(139,92,246,0.2)' }}>
+                  {tag}
+                </span>
+              ))}
+            </div>
+            <a href="/author/krishna-bhosale"
+              className="inline-flex items-center gap-2 text-sm font-semibold transition-colors"
+              style={{ color: 'var(--accent-primary)' }}>
+              View Full Author Profile →
+            </a>
           </div>
         </Section>
+
 
         {/* Trust */}
         <Section icon={Shield} title="Why Trust STL Mirror?">

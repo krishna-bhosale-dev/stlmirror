@@ -126,7 +126,32 @@ const SoftwareDetailPage = () => {
                 </section>
               )}
 
+              {/* Overview */}
+              {software.overview && (
+                <section>
+                  <h2 className="text-xl font-bold mb-4" style={{ color: 'var(--text-primary)' }}>Overview</h2>
+                  <div className="space-y-3">
+                    {software.overview.split('\n\n').map((para, i) => (
+                      <p key={i} className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{para}</p>
+                    ))}
+                  </div>
+                </section>
+              )}
+
+              {/* Why Use It */}
+              {software.whyUseIt && (
+                <section>
+                  <h2 className="text-xl font-bold mb-4" style={{ color: 'var(--text-primary)' }}>Who Should Use {software.name}?</h2>
+                  <div className="space-y-3">
+                    {software.whyUseIt.split('\n\n').map((para, i) => (
+                      <p key={i} className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{para}</p>
+                    ))}
+                  </div>
+                </section>
+              )}
+
               {/* Key Features */}
+
               <section>
                 <h2 className="text-xl font-bold mb-4" style={{ color: 'var(--text-primary)' }}>Key Features</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -172,7 +197,49 @@ const SoftwareDetailPage = () => {
                 </ol>
               </section>
 
+              {/* Safety Information */}
+              {software.safetyInfo && (
+                <section>
+                  <h2 className="text-xl font-bold mb-4" style={{ color: 'var(--text-primary)' }}>
+                    Is {software.name} Safe?
+                  </h2>
+                  <div className="p-5 rounded-xl space-y-3" style={{ background: 'rgba(34,197,94,0.05)', border: '1px solid rgba(34,197,94,0.2)' }}>
+                    {software.safetyInfo.split('\n\n').map((para, i) => (
+                      <p key={i} className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{para}</p>
+                    ))}
+                  </div>
+                </section>
+              )}
+
+              {/* Troubleshooting Tips */}
+              {software.troubleshootingTips && (
+                <section>
+                  <h2 className="text-xl font-bold mb-4" style={{ color: 'var(--text-primary)' }}>
+                    Troubleshooting Common Issues
+                  </h2>
+                  <div className="space-y-4">
+                    {software.troubleshootingTips.split('\n\n').map((tip, i) => {
+                      const parts = tip.split(':**')
+                      const hasTitle = tip.startsWith('**') && parts.length > 1
+                      return (
+                        <div key={i} className="p-4 rounded-xl" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-glass)' }}>
+                          {hasTitle ? (
+                            <>
+                              <p className="text-sm font-semibold mb-1" style={{ color: 'var(--text-primary)' }}>{parts[0].replace(/^\*\*/, '')}</p>
+                              <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{parts.slice(1).join(':**')}</p>
+                            </>
+                          ) : (
+                            <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{tip}</p>
+                          )}
+                        </div>
+                      )
+                    })}
+                  </div>
+                </section>
+              )}
+
               {/* FAQs */}
+
               {software.faqs?.length > 0 && (
                 <section>
                   <h2 className="text-xl font-bold mb-4" style={{ color: 'var(--text-primary)' }}>
@@ -185,6 +252,32 @@ const SoftwareDetailPage = () => {
                         <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{faq.a}</p>
                       </div>
                     ))}
+                  </div>
+                </section>
+              )}
+
+              {/* Alternatives */}
+              {software.alternatives && (
+                <section>
+                  <h2 className="text-xl font-bold mb-4" style={{ color: 'var(--text-primary)' }}>
+                    Alternatives to {software.name}
+                  </h2>
+                  <div className="space-y-3">
+                    {software.alternatives.split('\n\n').map((para, i) => (
+                      <p key={i} className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{para}</p>
+                    ))}
+                  </div>
+                </section>
+              )}
+
+              {/* Final Verdict */}
+              {software.verdict && (
+                <section>
+                  <h2 className="text-xl font-bold mb-4" style={{ color: 'var(--text-primary)' }}>
+                    Final Verdict
+                  </h2>
+                  <div className="p-5 rounded-xl" style={{ background: 'rgba(139,92,246,0.06)', border: '1px solid rgba(139,92,246,0.2)' }}>
+                    <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>{software.verdict}</p>
                   </div>
                 </section>
               )}

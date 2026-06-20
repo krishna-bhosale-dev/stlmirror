@@ -22,6 +22,7 @@ import TermsPage from './pages/legal/TermsPage'
 import DisclaimerPage from './pages/legal/DisclaimerPage'
 import DmcaPage from './pages/legal/DmcaPage'
 import EditorialPolicyPage from './pages/legal/EditorialPolicyPage'
+import AuthorPage from './pages/legal/AuthorPage'
 
 // Blog pages
 import BlogListPage from './pages/blog/BlogListPage'
@@ -81,6 +82,7 @@ const AppLayout = () => {
           <Route path="/disclaimer" element={<DisclaimerPage />} />
           <Route path="/dmca" element={<DmcaPage />} />
           <Route path="/editorial-policy" element={<EditorialPolicyPage />} />
+          <Route path="/author/krishna-bhosale" element={<AuthorPage />} />
 
           {/* ── Blog ── */}
           <Route path="/blog" element={<BlogListPage />} />

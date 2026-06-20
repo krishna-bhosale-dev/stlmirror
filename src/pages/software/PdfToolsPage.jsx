@@ -28,6 +28,16 @@ const PdfToolsPage = () => {
             <Breadcrumb items={[{ label: 'Software', href: '/software' }, { label: 'PDF Tools' }]} />
           </div>
           <SoftwareGrid software={software} />
+
+          {/* Editorial Intro */}
+          <div className="mt-12 max-w-3xl">
+            <h2 className="text-xl font-bold mb-4" style={{ color: 'var(--text-primary)' }}>Choosing the Right PDF Tool</h2>
+            <div className="space-y-3 text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+              <p>The PDF ecosystem is notoriously confusing. Many free PDF readers are bundled with adware, while professional PDF editors often cost upwards of $150 per year. For most users — students, developers, and small business owners — a combination of high-quality free tools is significantly better than a bloated premium suite.</p>
+              <p><strong style={{ color: 'var(--text-primary)' }}>Our testing methodology:</strong> We evaluate PDF tools based on four criteria: cold-start opening speed, memory footprint during large document rendering, accuracy of text selection/annotation, and the presence of hidden paywalls or adware.</p>
+              <p><strong style={{ color: 'var(--text-primary)' }}>Which tool do you actually need?</strong> If you strictly need to <em>read</em> PDFs (like textbooks or research papers), <strong>SumatraPDF</strong> is the undisputed best choice on Windows — it opens instantly and uses negligible RAM. If you need to annotate, highlight, or fill forms, <strong>Foxit PDF Reader</strong> provides those features for free. If you need to merge, split, or convert PDFs occasionally, we recommend using reputable web-based tools like ILovePDF rather than installing heavy desktop conversion software.</p>
+            </div>
+          </div>
         </div>
       </div>
     </>

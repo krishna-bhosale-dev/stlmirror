@@ -551,71 +551,279 @@
   <!-- AI Tools Directory -->
   <url>
     <loc>https://www.stlmirror.in/ai-tools</loc>
-    <lastmod>2026-06-07</lastmod>
+    <lastmod>2026-06-20</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
 
-  <!-- AI Tools Pages -->
+  <!-- AI Tools Pages — All 30 Tools -->
   <url>
     <loc>https://www.stlmirror.in/ai-tools/flow-ai-video-generation</loc>
-    <lastmod>2026-06-07</lastmod>
+    <lastmod>2026-06-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.stlmirror.in/ai-tools/scispace-ai-research-assistant</loc>
-    <lastmod>2026-06-07</lastmod>
+    <lastmod>2026-06-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.stlmirror.in/ai-tools/stealthwriter-ai-humanizer-review</loc>
-    <lastmod>2026-06-07</lastmod>
+    <lastmod>2026-06-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.stlmirror.in/ai-tools/perplexity-ai-search-engine-review</loc>
-    <lastmod>2026-06-07</lastmod>
+    <lastmod>2026-06-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.stlmirror.in/ai-tools/gamma-ai-presentation-generator</loc>
-    <lastmod>2026-06-07</lastmod>
+    <lastmod>2026-06-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.stlmirror.in/ai-tools/elevenlabs-ai-voice-generator</loc>
-    <lastmod>2026-06-07</lastmod>
+    <lastmod>2026-06-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.stlmirror.in/ai-tools/midjourney-ai-art-generator-review</loc>
-    <lastmod>2026-06-07</lastmod>
+    <lastmod>2026-06-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.stlmirror.in/ai-tools/runway-ml-gen2-video-ai</loc>
-    <lastmod>2026-06-07</lastmod>
+    <loc>https://www.stlmirror.in/ai-tools/runway-ml-ai-video-editing</loc>
+    <lastmod>2026-06-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.stlmirror.in/ai-tools/claude-3-opus-review</loc>
-    <lastmod>2026-06-07</lastmod>
+    <loc>https://www.stlmirror.in/ai-tools/claude-anthropic-ai-review</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.stlmirror.in/ai-tools/windsurf-ai-code-editor-review</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.stlmirror.in/ai-tools/lovable-ai-app-builder-review</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.stlmirror.in/ai-tools/notebooklm-ai-research-tool-review</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.stlmirror.in/ai-tools/heygen-ai-video-avatar-review</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.stlmirror.in/ai-tools/suno-ai-music-generator-review</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.stlmirror.in/ai-tools/descript-ai-video-editor-review</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.stlmirror.in/ai-tools/fireflies-ai-meeting-assistant-review</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.stlmirror.in/ai-tools/grok-ai-assistant-review</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.stlmirror.in/ai-tools/bolt-new-ai-app-builder-review</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.stlmirror.in/ai-tools/tavily-ai-search-api-review</loc>
+    <lastmod>2026-06-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.stlmirror.in/ai-tools/cursor-ai-code-editor-review</loc>
-    <lastmod>2026-06-07</lastmod>
+    <lastmod>2026-06-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.stlmirror.in/ai-tools/kling-ai-video-generator-review</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.stlmirror.in/ai-tools/luma-dream-machine-review</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.stlmirror.in/ai-tools/leonardo-ai-image-generator-review</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.stlmirror.in/ai-tools/pixlr-ai-photo-editor-review</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.stlmirror.in/ai-tools/otter-ai-meeting-transcription-review</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.stlmirror.in/ai-tools/elicit-ai-research-assistant-review</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.stlmirror.in/ai-tools/consensus-ai-academic-search-review</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.stlmirror.in/ai-tools/reclaim-ai-productivity-scheduler-review</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.stlmirror.in/ai-tools/teal-ai-career-platform-review</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.stlmirror.in/ai-tools/kickresume-ai-resume-builder-review</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Author Page -->
+  <url>
+    <loc>https://www.stlmirror.in/author/krishna-bhosale</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- New Cornerstone Blog Posts (2026) -->
+  <url>
+    <loc>https://www.stlmirror.in/blog/best-ai-tools-for-students-2026</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.stlmirror.in/blog/best-ai-tools-software-developers-2026</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.stlmirror.in/blog/best-ai-tools-researchers-2026</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.stlmirror.in/blog/best-ai-tools-college-projects-2026</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.stlmirror.in/blog/best-resume-builders-freshers-2026</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.stlmirror.in/blog/best-productivity-tools-students-2026</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.stlmirror.in/blog/notebooklm-vs-perplexity-comparison</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.stlmirror.in/blog/best-ai-graphic-design-tools-2026</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.stlmirror.in/blog/ai-tools-placement-preparation</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.stlmirror.in/blog/ai-tools-gate-aspirants-2026</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.stlmirror.in/blog/best-free-software-students-2026</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.stlmirror.in/blog/complete-guide-ai-agents-2026</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.stlmirror.in/blog/ai-tools-engineering-students-2026</loc>
+    <lastmod>2026-06-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
   </url>
 
 </urlset>
