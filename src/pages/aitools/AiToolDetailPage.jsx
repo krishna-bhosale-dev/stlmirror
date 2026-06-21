@@ -14,10 +14,11 @@ const RelatedToolCard = ({ tool }) => (
       style={{ background: 'linear-gradient(135deg, rgba(139,92,246,0.15), rgba(6,182,212,0.1))' }}>
       <img
         src={tool.thumbnail || getFallbackImage(tool.category)}
-        alt={tool.title}
+        alt={tool.logoAlt || (tool.name ? `${tool.name} logo` : tool.title)}
         loading="lazy"
         onError={(e) => handleImageError(e, tool.category)}
-        className="w-full h-full object-cover"
+        className="w-full h-full object-contain p-2"
+        style={{ background: 'var(--bg-card)' }}
       />
     </div>
     <div className="flex-1 min-w-0">
@@ -162,15 +163,15 @@ const AiToolDetailPage = () => {
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-10">
             {/* Article */}
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-              {/* Thumbnail */}
-              <div className="w-full h-52 sm:h-72 rounded-2xl mb-8 overflow-hidden relative" style={{ border: '1px solid var(--border-glass)' }}>
+              {/* Logo */}
+              <div className="w-full h-52 sm:h-72 rounded-2xl mb-8 overflow-hidden relative flex items-center justify-center" style={{ border: '1px solid var(--border-glass)', background: 'var(--bg-card)' }}>
                 <img
                   src={tool.thumbnail || getFallbackImage(tool.category)}
-                  alt={tool.title}
+                  alt={tool.logoAlt || (tool.name ? `${tool.name} logo` : tool.title)}
                   loading="eager"
                   decoding="async"
                   onError={(e) => handleImageError(e, tool.category)}
-                  className="w-full h-full object-cover"
+                  className="max-w-[60%] max-h-[60%] object-contain"
                 />
               </div>
 

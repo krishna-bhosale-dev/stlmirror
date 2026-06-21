@@ -47,12 +47,12 @@ const ToolCard = ({ tool, badge }) => (
     <div className="w-full h-44 relative overflow-hidden">
       <img
         src={tool.thumbnail || getFallbackImage(tool.category)}
-        alt={tool.title}
+        alt={tool.logoAlt || (tool.name ? `${tool.name} logo` : tool.title)}
         loading="lazy"
         decoding="async"
         onError={(e) => handleImageError(e, tool.category)}
-        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-        style={{ display: 'block' }}
+        className="w-full h-full object-contain p-4 transition-transform duration-500 group-hover:scale-105"
+        style={{ display: 'block', background: 'var(--bg-card)' }}
       />
       <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-card)] via-transparent to-transparent" />
       {badge && (
