@@ -242,6 +242,51 @@ function writeRouteHtml(routePath, html) {
   fs.writeFileSync(outputPath, html, 'utf8');
 }
 
+function getSitemapParams(routePath) {
+  if (routePath === '/') {
+    return { changefreq: 'daily', priority: '1.0' };
+  }
+  if (['/blog', '/ai-tools', '/software'].includes(routePath)) {
+    return { changefreq: 'weekly', priority: '0.9' };
+  }
+  if (['/apk', '/pdf-tools', '/developer-tools', '/latest', '/most-downloaded', '/recently-updated'].includes(routePath)) {
+    return { changefreq: 'weekly', priority: '0.8' };
+  }
+  if (routePath.startsWith('/blog/')) {
+    return { changefreq: 'monthly', priority: '0.8' };
+  }
+  if (routePath.startsWith('/ai-tools/')) {
+    return { changefreq: 'monthly', priority: '0.8' };
+  }
+  if (routePath.startsWith('/software/')) {
+    return { changefreq: 'monthly', priority: '0.8' };
+  }
+  if (['/about', '/contact', '/editorial-policy', '/author/krishna-bhosale'].includes(routePath)) {
+    return { changefreq: 'monthly', priority: '0.7' };
+  }
+  return { changefreq: 'yearly', priority: '0.5' };
+}
+
+function generateSitemapXml(routes) {
+  const lastmod = new Date().toISOString().split('T')[0];
+  let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
+  xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
+
+  for (const route of routes) {
+    const { changefreq, priority } = getSitemapParams(route.path);
+    const loc = `${BASE_URL}${route.path === '/' ? '/' : route.path}`;
+    xml += '  <url>\n';
+    xml += `    <loc>${loc}</loc>\n`;
+    xml += `    <lastmod>${lastmod}</lastmod>\n`;
+    xml += `    <changefreq>${changefreq}</changefreq>\n`;
+    xml += `    <priority>${priority}</priority>\n`;
+    xml += '  </url>\n';
+  }
+
+  xml += '</urlset>\n';
+  return xml;
+}
+
 // ─── Main ─────────────────────────────────────────────────────────────────────
 function main() {
   console.log('🔧 STL Mirror — Generating per-page SEO HTML files...\n');
@@ -254,7 +299,10 @@ function main() {
     path.join(__dirname, '..', 'src', 'data', 'aiToolsData.js')
   );
   const software = parseDataFile(
-    path.join(__dirname, '..', 'src', 'data', 'softwareData.js')
+    path.join(__dirname, '..', 'src', 'data', 'softwareData.js'),
+    'slug',
+    'name',
+    'description'
   );
 
   console.log(`  Found: ${blogPosts.length} blog posts, ${aiTools.length} AI tools, ${software.length} software pages`);
@@ -298,6 +346,17 @@ function main() {
 
   console.log(`\n✅ Generated ${generated} HTML files (${errors} errors)`);
   console.log(`📁 Output: ${DIST_DIR}`);
+
+  // Generate and write sitemap.xml
+  try {
+    console.log('🔧 Generating sitemap.xml...');
+    const sitemapXml = generateSitemapXml(allRoutes);
+    fs.writeFileSync(path.join(__dirname, '..', 'public', 'sitemap.xml'), sitemapXml, 'utf8');
+    fs.writeFileSync(path.join(DIST_DIR, 'sitemap.xml'), sitemapXml, 'utf8');
+    console.log(`✅ Generated sitemap.xml with ${allRoutes.length} entries`);
+  } catch (err) {
+    console.error('❌ Error generating sitemap.xml:', err.message);
+  }
 
   // Verify a sample
   const samplePath = path.join(DIST_DIR, 'ai-tools', 'cursor-ai-code-editor-review', 'index.html');

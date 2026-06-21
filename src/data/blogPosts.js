@@ -4298,7 +4298,7 @@ node index.js</code></pre>
   },
   {
     id: 54,
-    slug: 'best-ai-tools-for-students-2026',
+    slug: 'student-ai-tools-guide-2026',
     title: 'Best AI Tools for Students in 2026 (Free & Paid)',
     category: 'AI Tools',
     tags: ['AI tools for students', 'NotebookLM', 'Perplexity', 'study tools', 'free AI'],

@@ -89,6 +89,19 @@ const AuthorPage = () => (
                   <span className="text-sm" style={{ color: 'var(--text-muted)' }}>85+ articles published</span>
                 </div>
               </div>
+
+              <div className="flex gap-4 mt-5">
+                <a href="https://github.com/Sumit-cyber-gif" target="_blank" rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-xs px-3 py-1.5 rounded-xl transition-all hover:opacity-80"
+                  style={{ background: 'var(--bg-card)', border: '1px solid var(--border-glass)', color: 'var(--text-primary)' }}>
+                  <Code2 className="w-4 h-4" style={{ color: 'var(--accent-primary)' }} /> GitHub
+                </a>
+                <a href="https://linkedin.com/in/krishna-bhosale-vit" target="_blank" rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-xs px-3 py-1.5 rounded-xl transition-all hover:opacity-80"
+                  style={{ background: 'var(--bg-card)', border: '1px solid var(--border-glass)', color: 'var(--text-primary)' }}>
+                  <ExternalLink className="w-4 h-4" style={{ color: 'var(--accent-secondary)' }} /> LinkedIn
+                </a>
+              </div>
             </div>
           </motion.div>
         </div>
