@@ -1,9 +1,7 @@
 User-agent: *
 Allow: /
 
-# Block admin routes from indexing
-Disallow: /secure-admin-upload
-Disallow: /secure-admin-upload/login
+# Disallow private and system paths
 Disallow: /unauthorized
 
 # Allow all public routes

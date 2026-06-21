@@ -27,6 +27,21 @@ const MostDownloadedPage = () => {
           <div className="mb-8">
             <Breadcrumb items={[{ label: 'Software', href: '/software' }, { label: 'Most Downloaded' }]} />
           </div>
+
+          {/* Editorial intro */}
+          <div className="mb-10 p-6 rounded-2xl bg-white/5 border border-white/10">
+            <h2 className="text-xl font-semibold text-white mb-3">How We Determine "Most Downloaded"</h2>
+            <p className="text-gray-300 mb-3">
+              This list ranks software by the download volume and user adoption data we observe across the tools in our directory. High download counts alone do not earn a spot — each tool is still independently reviewed to confirm that the popularity is warranted and that the tool delivers real value to users.
+            </p>
+            <p className="text-gray-300 mb-3">
+              Tools that appear here have been tested for: installation reliability across Windows and Mac, quality of documentation, active developer support, and a pricing model that is fair for the value delivered. We do not list software with dark patterns, forced registration walls, or hidden costs in this section.
+            </p>
+            <p className="text-gray-300">
+              If you find a tool that no longer meets this quality bar, use our feedback option to report it. Our goal is to keep this list trustworthy, not just popular. Browse the <a href="/software" className="text-blue-400 underline">full directory</a> for the complete catalog.
+            </p>
+          </div>
+
           <SoftwareGrid software={software} />
         </div>
       </div>

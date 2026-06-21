@@ -52,9 +52,9 @@ const EditorialPolicyPage = () => (
         {/* Summary cards */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-12">
           {[
-            { label: 'Articles Published', value: '20+', icon: BookOpen },
-            { label: 'Team Members', value: '3+', icon: Users },
-            { label: 'Avg. Accuracy Score', value: '98%', icon: Star },
+            { label: 'Articles Published', value: '90+', icon: BookOpen },
+            { label: 'Author', value: '1', icon: Users },
+            { label: 'Fact-Checked', value: '100%', icon: Star },
             { label: 'Update Frequency', value: 'Monthly', icon: RefreshCw },
           ].map(item => (
             <div key={item.label} className="p-4 rounded-xl text-center" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-glass)' }}>
@@ -84,13 +84,13 @@ const EditorialPolicyPage = () => (
         </Section>
 
         <Section icon={BookOpen} title="Research Methodology">
-          <p>When writing software reviews and guides, our team follows a consistent research process:</p>
+          <p>STL Mirror is run by one person — Krishna Bhosale — a software engineering student at VIT Pune. When writing software reviews and guides, I follow a consistent process:</p>
           <ol className="list-decimal pl-5 space-y-2">
-            <li><strong style={{ color: 'var(--text-primary)' }}>Direct testing:</strong> We download and use the software in real-world scenarios on multiple operating systems where applicable</li>
-            <li><strong style={{ color: 'var(--text-primary)' }}>Performance evaluation:</strong> We measure launch times, memory usage, and feature completeness against competing products</li>
-            <li><strong style={{ color: 'var(--text-primary)' }}>User research:</strong> We review user feedback from app stores, forums, and support communities</li>
-            <li><strong style={{ color: 'var(--text-primary)' }}>Expert consultation:</strong> For technical topics, we consult developers and domain experts</li>
-            <li><strong style={{ color: 'var(--text-primary)' }}>Peer review:</strong> Final articles are reviewed by a second team member before publication</li>
+            <li><strong style={{ color: 'var(--text-primary)' }}>Direct testing:</strong> I download and personally use every tool I review in real-world scenarios before writing a single word</li>
+            <li><strong style={{ color: 'var(--text-primary)' }}>Performance evaluation:</strong> I measure launch times, memory usage, and feature completeness against competing products where relevant</li>
+            <li><strong style={{ color: 'var(--text-primary)' }}>Community research:</strong> I review genuine user feedback from Reddit, app stores, and developer forums to validate my findings</li>
+            <li><strong style={{ color: 'var(--text-primary)' }}>Documentation review:</strong> I consult official developer documentation to ensure technical accuracy</li>
+            <li><strong style={{ color: 'var(--text-primary)' }}>Self-review:</strong> All articles are reviewed at least 24 hours after initial writing to catch errors and improve clarity</li>
           </ol>
         </Section>
 
@@ -105,14 +105,16 @@ const EditorialPolicyPage = () => (
           </ul>
         </Section>
 
-        <Section icon={Users} title="Author Qualifications">
-          <p>Content on STL Mirror is written by experienced software enthusiasts and technical writers who:</p>
+        <Section icon={Users} title="About the Author">
+          <p>All content on STL Mirror is written by <strong>Krishna Bhosale</strong>, founder and sole author. Krishna is a software engineering student at Vishwakarma Institute of Technology (VIT), Pune, specialising in full-stack development, AI integration, and cybersecurity.</p>
           <ul className="list-disc pl-5 space-y-1">
-            <li>Have hands-on experience with the software they write about</li>
-            <li>Stay current with software industry news and updates</li>
-            <li>Are committed to continuous learning in their technical domains</li>
-            <li>Follow journalistic ethics standards for accuracy and fairness</li>
+            <li>Personally tests every tool before writing about it — no second-hand summaries</li>
+            <li>Has hands-on development experience in React, Node.js, Android, and AI tooling</li>
+            <li>Reviews software through the lens of students and developers on modest budgets</li>
+            <li>Discloses affiliate relationships explicitly on relevant pages</li>
+            <li>Follows journalistic ethics standards for accuracy, fairness, and independence</li>
           </ul>
+          <p>You can read more about Krishna's methodology and background on the <a href="/author/krishna-bhosale" className="underline" style={{ color: 'var(--accent-primary)' }}>Author page</a>.</p>
         </Section>
 
         <Section icon={Star} title="Independence Statement">
