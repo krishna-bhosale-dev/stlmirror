@@ -1,14 +1,15 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { TrendingUp, Clock, Files, Zap, ArrowDown } from 'lucide-react'
-import { useFiles } from '../hooks/useFiles'
-import FileGrid from '../components/files/FileGrid'
-import CategoryFilter from '../components/filters/CategoryFilter'
-import SearchBar from '../components/search/SearchBar'
-import FileCard from '../components/files/FileCard'
-import { FileSkeletonGrid } from '../components/files/FileSkeleton'
+import { Files, Zap, ArrowDown, Download, LinkIcon, Smartphone } from 'lucide-react'
 import { supabase } from '../config/supabase'
+import SearchBar from '../components/search/SearchBar'
 import Banner728 from '../components/ads/Banner728'
+
+// Sections
+import HomeStlFilesSection from '../components/home/HomeStlFilesSection'
+import HomeAiToolsSection from '../components/home/HomeAiToolsSection'
+import HomeBlogSection from '../components/home/HomeBlogSection'
+import HomePlaceholderSection from '../components/home/HomePlaceholderSection'
 
 const StatBadge = ({ icon: Icon, label, value }) => (
   <div className="flex items-center gap-2 glass rounded-full px-4 py-2">
@@ -19,55 +20,66 @@ const StatBadge = ({ icon: Icon, label, value }) => (
 )
 
 const HomePage = ({ externalSearch }) => {
-  const {
-    files,
-    loading,
-    error,
-    hasMore,
-    loadMore,
-    trending,
-    trendingLoading,
-    totalCount,
-    searchQuery,
-    setSearchQuery,
-    category,
-    setCategory,
-    sortBy,
-    setSortBy,
-  } = useFiles()
-
+  const [searchQuery, setSearchQuery] = useState('')
   const [statsCount, setStatsCount] = useState({ total: 0 })
 
-  // Sync navbar search into hook
+  // Data states
+  const [stlFiles, setStlFiles] = useState([])
+  const [stlLoading, setStlLoading] = useState(true)
+  const [premiumDownloads, setPremiumDownloads] = useState([])
+  const [websiteLinks, setWebsiteLinks] = useState([])
+  const [apks, setApks] = useState([])
+
+  // Sync navbar search
   useEffect(() => {
     if (externalSearch !== undefined) {
       setSearchQuery(externalSearch)
     }
-  }, [externalSearch]) // eslint-disable-line
+  }, [externalSearch])
 
+  // Fetch Homepage Data
   useEffect(() => {
-    supabase.from('files').select('id', { count: 'exact', head: true }).then(({ count }) => {
-      setStatsCount({ total: count || 0 })
-    })
-  }, [])
+    const fetchData = async () => {
+      // Total files for stats
+      supabase.from('files').select('id', { count: 'exact', head: true }).then(({ count }) => {
+        setStatsCount({ total: count || 0 })
+      })
 
-  const handleDownload = useCallback(() => {
-    // Download logic is handled inside FileCard; this is just for analytics
-  }, [])
+      // Fetch Latest 4 STL Files
+      setStlLoading(true)
+      supabase.from('files').select('*').order('created_at', { ascending: false }).limit(4).then(({ data }) => {
+        if (data) setStlFiles(data)
+        setStlLoading(false)
+      })
 
-  const isFiltered = searchQuery || category !== 'all'
+      // Fetch Premium Downloads
+      supabase.from('premium_downloads').select('*').order('created_at', { ascending: false }).limit(4).then(({ data }) => {
+        if (data) setPremiumDownloads(data)
+      }).catch(() => {}) // Graceful fallback if table doesn't exist
+
+      // Fetch Website Links
+      supabase.from('website_links').select('*').order('created_at', { ascending: false }).limit(4).then(({ data }) => {
+        if (data) setWebsiteLinks(data)
+      }).catch(() => {})
+
+      // Fetch APKs
+      supabase.from('apk_items').select('*').order('created_at', { ascending: false }).limit(4).then(({ data }) => {
+        if (data) setApks(data)
+      }).catch(() => {})
+    }
+
+    fetchData()
+  }, [])
 
 
   return (
     <div className="min-h-screen bg-grid">
       {/* ─── Hero ───────────────────────────────────────────────── */}
       <section className="relative overflow-hidden py-20 sm:py-28">
-        {/* Background orbs */}
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          {/* Badge */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -79,7 +91,6 @@ const HomePage = ({ externalSearch }) => {
             </span>
           </motion.div>
 
-          {/* Headline */}
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -88,7 +99,7 @@ const HomePage = ({ externalSearch }) => {
           >
             <span className="text-[var(--text-primary)]">Your Premium</span>
             <br />
-            <span className="gradient-text">File Mirror</span>
+            <span className="gradient-text">Digital Resource Hub</span>
           </motion.h1>
 
           <motion.p
@@ -97,11 +108,10 @@ const HomePage = ({ externalSearch }) => {
             transition={{ delay: 0.2 }}
             className="text-lg sm:text-xl text-[var(--text-secondary)] max-w-2xl mx-auto mb-10 leading-relaxed"
           >
-            Browse, search, preview, and download files of every type.
-            Images, documents, videos, archives — all in one place.
+            Browse, search, preview, and download premium assets.
+            STL Files, Tools, APKs, and Links — all in one place.
           </motion.p>
 
-          {/* Hero search */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -111,12 +121,11 @@ const HomePage = ({ externalSearch }) => {
             <SearchBar
               value={searchQuery}
               onChange={setSearchQuery}
-              placeholder="Search for files, documents, images…"
+              placeholder="Search across all resources..."
               className="w-full text-base"
             />
           </motion.div>
 
-          {/* Stats */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -125,10 +134,8 @@ const HomePage = ({ externalSearch }) => {
           >
             <StatBadge icon={Files} label="Total Files" value={statsCount.total} />
             <StatBadge icon={Zap} label="Instant" value="Downloads" />
-            <StatBadge icon={TrendingUp} label="Updated" value="Daily" />
           </motion.div>
 
-          {/* Scroll hint */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -143,77 +150,101 @@ const HomePage = ({ externalSearch }) => {
         </div>
       </section>
 
-      {/* ─── 728x90 Leaderboard ─── Desktop only, between hero and content ─── */}
       <Banner728 />
 
+      {/* ─── Content Sections ───────────────────────────────────────────────── */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
-        {/* ─── Trending ───────────────────────────────────────── */}
-        {!isFiltered && (
-          <section className="mb-16">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="p-2 rounded-xl bg-orange-500/10 border border-orange-500/20">
-                <TrendingUp className="w-5 h-5 text-orange-400" />
+        
+        {/* STL Files */}
+        <HomeStlFilesSection files={stlFiles} loading={stlLoading} />
+
+        {/* AI Tools */}
+        <HomeAiToolsSection />
+
+        {/* Blogs */}
+        <HomeBlogSection />
+
+        {/* Premium Downloads */}
+        <HomePlaceholderSection 
+          items={premiumDownloads}
+          title="Premium Downloads"
+          icon={Download}
+          linkTo="/premium-downloads"
+          colorClass="text-blue-400"
+          bgClass="bg-blue-500/10 border-blue-500/20"
+          renderItem={(item) => (
+            <a key={item.id} href={item.file_url} target="_blank" rel="noopener noreferrer" className="card group overflow-hidden flex flex-col h-full hover:border-[var(--accent-primary)] transition-colors">
+              <div className="w-full h-32 relative overflow-hidden bg-[var(--bg-secondary)] flex items-center justify-center">
+                {item.thumbnail_url ? (
+                  <img src={item.thumbnail_url} alt={item.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                ) : (
+                  <Download className="w-10 h-10 text-[var(--border-glass)] group-hover:scale-110 transition-transform duration-500" />
+                )}
               </div>
-              <h2 className="text-xl font-bold text-[var(--text-primary)]">
-                Trending Now
-              </h2>
-              <div className="flex-1 h-px bg-[var(--border-glass)]" />
-            </div>
-
-            {trendingLoading ? (
-              <FileSkeletonGrid count={6} />
-            ) : trending.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                {trending.map((file) => (
-                  <FileCard key={file.id} file={file} onDownload={handleDownload} />
-                ))}
+              <div className="p-4 flex flex-col flex-1">
+                <span className="text-xs text-[var(--text-muted)] mb-1">{item.category}</span>
+                <h3 className="font-bold text-sm mb-2 group-hover:text-blue-400 transition-colors line-clamp-2">{item.title}</h3>
+                <div className="mt-auto pt-3 border-t border-[var(--border-glass)] text-xs text-[var(--text-muted)] flex justify-between">
+                  <span>{item.downloads || 0} Downloads</span>
+                </div>
               </div>
-            ) : (
-              <p className="text-[var(--text-muted)] text-sm">No trending files yet.</p>
-            )}
-          </section>
-        )}
+            </a>
+          )}
+        />
 
-        {/* ─── Latest / Filtered Files ────────────────────────── */}
-        <section>
-          <div className="flex items-center gap-3 mb-6">
-            <div className="p-2 rounded-xl bg-cyan-500/10 border border-cyan-500/20">
-              <Clock className="w-5 h-5 text-cyan-400" />
-            </div>
-            <h2 className="text-xl font-bold text-[var(--text-primary)]">
-              {searchQuery
-                ? `Results for "${searchQuery}"`
-                : category !== 'all'
-                ? `${category.charAt(0).toUpperCase() + category.slice(1)}`
-                : 'Latest Uploads'}
-            </h2>
-            {totalCount > 0 && (
-              <span className="ml-2 text-xs text-[var(--text-muted)] bg-[var(--bg-secondary)] px-2 py-1 rounded-full border border-[var(--border-glass)]">
-                {totalCount} files
-              </span>
-            )}
-            <div className="flex-1 h-px bg-[var(--border-glass)]" />
-          </div>
+        {/* Website Links */}
+        <HomePlaceholderSection 
+          items={websiteLinks}
+          title="Curated Websites"
+          icon={LinkIcon}
+          linkTo="/website-links"
+          colorClass="text-green-400"
+          bgClass="bg-green-500/10 border-green-500/20"
+          renderItem={(item) => (
+            <a key={item.id} href={item.url} target="_blank" rel="noopener noreferrer" className="card group overflow-hidden flex flex-col h-full hover:border-[var(--accent-primary)] transition-colors">
+              <div className="w-full h-32 relative overflow-hidden bg-white flex items-center justify-center p-4">
+                {item.thumbnail_url ? (
+                  <img src={item.thumbnail_url} alt={item.title} className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105" />
+                ) : (
+                  <LinkIcon className="w-10 h-10 text-[var(--border-glass)] group-hover:scale-110 transition-transform duration-500" />
+                )}
+              </div>
+              <div className="p-4 flex flex-col flex-1">
+                <span className="text-xs text-[var(--text-muted)] mb-1">{item.category}</span>
+                <h3 className="font-bold text-sm mb-2 group-hover:text-green-400 transition-colors line-clamp-2">{item.title}</h3>
+              </div>
+            </a>
+          )}
+        />
 
-          {/* Filters */}
-          <div className="mb-6">
-            <CategoryFilter
-              activeCategory={category}
-              onCategoryChange={setCategory}
-              sortBy={sortBy}
-              onSortChange={setSortBy}
-            />
-          </div>
-
-          <FileGrid
-            files={files}
-            loading={loading}
-            hasMore={hasMore}
-            onLoadMore={loadMore}
-            onDownload={handleDownload}
-            error={error}
-          />
-        </section>
+        {/* APKs */}
+        <HomePlaceholderSection 
+          items={apks}
+          title="Latest APKs"
+          icon={Smartphone}
+          linkTo="/apks"
+          colorClass="text-purple-400"
+          bgClass="bg-purple-500/10 border-purple-500/20"
+          renderItem={(item) => (
+            <a key={item.id} href={item.file_url} target="_blank" rel="noopener noreferrer" className="card group overflow-hidden flex flex-col h-full hover:border-[var(--accent-primary)] transition-colors">
+              <div className="w-full h-32 relative overflow-hidden bg-[var(--bg-secondary)] flex items-center justify-center p-4">
+                {item.thumbnail_url ? (
+                  <img src={item.thumbnail_url} alt={item.title} className="w-16 h-16 rounded-2xl shadow-lg transition-transform duration-500 group-hover:scale-110" />
+                ) : (
+                  <Smartphone className="w-10 h-10 text-[var(--border-glass)] group-hover:scale-110 transition-transform duration-500" />
+                )}
+              </div>
+              <div className="p-4 flex flex-col flex-1">
+                <div className="flex justify-between items-start mb-1">
+                  <span className="text-xs text-[var(--text-muted)]">{item.category}</span>
+                  <span className="text-xs font-mono text-[var(--accent-primary)] bg-[var(--accent-primary)]/10 px-1.5 py-0.5 rounded">v{item.version}</span>
+                </div>
+                <h3 className="font-bold text-sm mb-2 group-hover:text-purple-400 transition-colors line-clamp-2">{item.title}</h3>
+              </div>
+            </a>
+          )}
+        />
+        
       </div>
     </div>
   )

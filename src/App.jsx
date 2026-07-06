@@ -12,10 +12,24 @@ import './components/ads/ads.css'
 // Existing pages
 import HomePage from './pages/HomePage'
 import FileDetailPage from './pages/FileDetailPage'
-import SecureAdminPage from './pages/SecureAdminPage'
 import SecureAdminLoginPage from './pages/SecureAdminLoginPage'
 import UnauthorizedPage from './pages/UnauthorizedPage'
 import NotFoundPage from './pages/NotFoundPage'
+
+// STL Files Page
+import StlFilesPage from './pages/stlfiles/StlFilesPage'
+
+// Admin Pages
+import AdminLayout from './pages/admin/AdminLayout'
+import AdminDashboardPage from './pages/admin/AdminDashboardPage'
+import AdminStlFilesPage from './pages/admin/AdminStlFilesPage'
+import AdminPremiumDownloadsPage from './pages/admin/AdminPremiumDownloadsPage'
+import AdminWebsiteLinksPage from './pages/admin/AdminWebsiteLinksPage'
+import AdminApksPage from './pages/admin/AdminApksPage'
+import AdminAiToolsPage from './pages/admin/AdminAiToolsPage'
+import AdminBlogsPage from './pages/admin/AdminBlogsPage'
+import AdminCategoriesPage from './pages/admin/AdminCategoriesPage'
+import AdminSettingsPage from './pages/admin/AdminSettingsPage'
 
 // Legal pages
 import AboutPage from './pages/legal/AboutPage'
@@ -76,6 +90,7 @@ const AppLayout = () => {
           {/* ── Core ── */}
           <Route path="/" element={<HomePage externalSearch={globalSearch} />} />
           <Route path="/file/:id" element={<FileDetailPage />} />
+          <Route path="/stl-files" element={<StlFilesPage />} />
 
           {/* ── Legal & Trust ── */}
           <Route path="/about" element={<AboutPage />} />
@@ -125,10 +140,20 @@ const App = () => (
             path="/secure-admin-upload"
             element={
               <AdminRoute>
-                <SecureAdminPage />
+                <AdminLayout />
               </AdminRoute>
             }
-          />
+          >
+            <Route index element={<AdminDashboardPage />} />
+            <Route path="stl-files" element={<AdminStlFilesPage />} />
+            <Route path="premium-downloads" element={<AdminPremiumDownloadsPage />} />
+            <Route path="website-links" element={<AdminWebsiteLinksPage />} />
+            <Route path="apks" element={<AdminApksPage />} />
+            <Route path="ai-tools" element={<AdminAiToolsPage />} />
+            <Route path="blogs" element={<AdminBlogsPage />} />
+            <Route path="categories" element={<AdminCategoriesPage />} />
+            <Route path="settings" element={<AdminSettingsPage />} />
+          </Route>
           <Route path="/secure-admin-upload/login" element={<SecureAdminLoginPage />} />
           <Route path="/unauthorized" element={<UnauthorizedPage />} />
 

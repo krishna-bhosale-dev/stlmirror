@@ -1,16 +1,14 @@
 import { useState, useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { useDropzone } from 'react-dropzone'
 import { motion, AnimatePresence } from 'framer-motion'
 import toast from 'react-hot-toast'
 import {
-  Upload, LogOut, Trash2, Edit2, Star, StarOff,
+  Upload, Trash2, Edit2, Star, StarOff,
   X, Check, Files, HardDrive, TrendingUp, CloudUpload,
-  Loader2, Home, Lock,
+  Loader2, Lock
 } from 'lucide-react'
-import { useAuth } from '../context/AuthContext'
-import { useAdmin } from '../hooks/useAdmin'
-import { formatFileSize, formatDate, getExtensionColor } from '../utils/formatters'
+import { useAdmin } from '../../hooks/useAdmin'
+import { formatFileSize, formatDate, getExtensionColor } from '../../utils/formatters'
 
 // ─── Upload Form ──────────────────────────────────────────────────────────────
 const UploadForm = ({ onUpload, uploading, uploadProgress }) => {
@@ -236,7 +234,7 @@ const FileRow = ({ file, onEdit, onDelete, onToggleFeatured }) => {
 
   return (
     <motion.tr initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-      className="border-b transition-colors"
+      className="border-b transition-colors hover:bg-[var(--bg-secondary)]"
       style={{ borderColor: 'var(--border-glass)' }}>
       <td className="px-4 py-3">
         <div className="flex items-center gap-3">
@@ -251,8 +249,8 @@ const FileRow = ({ file, onEdit, onDelete, onToggleFeatured }) => {
       <td className="px-4 py-3 text-xs" style={{ color: 'var(--text-muted)' }}>{formatFileSize(file.file_size)}</td>
       <td className="px-4 py-3 text-xs" style={{ color: 'var(--text-muted)' }}>{file.downloads || 0}</td>
       <td className="px-4 py-3 text-xs" style={{ color: 'var(--text-muted)' }}>{formatDate(file.created_at)}</td>
-      <td className="px-4 py-3">
-        <div className="flex items-center gap-2">
+      <td className="px-4 py-3 text-right">
+        <div className="flex items-center justify-end gap-2">
           <button onClick={() => onToggleFeatured(file.id, file.is_featured)} title={file.is_featured ? 'Unfeature' : 'Feature'}
             className="p-1.5 rounded-lg transition-all"
             style={{
@@ -262,14 +260,13 @@ const FileRow = ({ file, onEdit, onDelete, onToggleFeatured }) => {
             {file.is_featured ? <Star className="w-4 h-4" style={{ fill: '#facc15' }} /> : <StarOff className="w-4 h-4" />}
           </button>
           <button onClick={() => onEdit(file)} title="Edit"
-            className="p-1.5 rounded-lg transition-all" style={{ color: 'var(--text-muted)' }}>
+            className="p-1.5 rounded-lg transition-all hover:bg-blue-500/10 hover:text-blue-400" style={{ color: 'var(--text-muted)' }}>
             <Edit2 className="w-4 h-4" />
           </button>
           {confirmDelete ? (
             <div className="flex items-center gap-1">
               <button onClick={() => { onDelete(file.id, file.file_name); setConfirmDelete(false) }}
-                className="px-2 py-1 rounded-lg text-xs font-medium"
-                style={{ background: 'rgba(239,68,68,0.15)', color: '#f87171' }}>
+                className="px-2 py-1 rounded-lg text-xs font-medium bg-red-500/10 text-red-400">
                 Confirm
               </button>
               <button onClick={() => setConfirmDelete(false)}
@@ -279,7 +276,7 @@ const FileRow = ({ file, onEdit, onDelete, onToggleFeatured }) => {
             </div>
           ) : (
             <button onClick={() => setConfirmDelete(true)} title="Delete"
-              className="p-1.5 rounded-lg transition-all" style={{ color: 'var(--text-muted)' }}>
+              className="p-1.5 rounded-lg transition-all hover:bg-red-500/10 hover:text-red-400" style={{ color: 'var(--text-muted)' }}>
               <Trash2 className="w-4 h-4" />
             </button>
           )}
@@ -289,18 +286,11 @@ const FileRow = ({ file, onEdit, onDelete, onToggleFeatured }) => {
   )
 }
 
-// ─── Secure Admin Dashboard ───────────────────────────────────────────────────
-const SecureAdminPage = () => {
-  const navigate = useNavigate()
-  const { user, signOut } = useAuth()
+// ─── STL Files Dashboard ──────────────────────────────────────────────────────
+const AdminStlFilesPage = () => {
   const { files, loading, uploading, uploadProgress, uploadFile, updateFile, deleteFile, toggleFeatured } = useAdmin()
   const [editingFile, setEditingFile] = useState(null)
   const [tableSearch, setTableSearch] = useState('')
-
-  const handleSignOut = async () => {
-    await signOut()
-    navigate('/')
-  }
 
   const handleDelete = async (id, fileName) => {
     const res = await deleteFile(id, fileName)
@@ -322,83 +312,55 @@ const SecureAdminPage = () => {
   const totalSize = files.reduce((acc, f) => acc + (f.file_size || 0), 0)
 
   return (
-    <div className="min-h-screen py-8" style={{ background: 'var(--bg-primary)' }}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+    <div className="space-y-8 max-w-7xl mx-auto">
+      <div>
+        <h1 className="text-2xl font-bold text-[var(--text-primary)] mb-2">STL Files</h1>
+        <p className="text-[var(--text-secondary)] text-sm">Upload and manage R2-backed files.</p>
+      </div>
 
-        {/* ── Header ── */}
-        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
-          className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div>
-            <div className="flex items-center gap-3 mb-1">
-              <div className="p-2 rounded-xl" style={{ background: 'rgba(139,92,246,0.1)', border: '1px solid rgba(139,92,246,0.2)' }}>
-                <Lock className="w-5 h-5" style={{ color: '#a78bfa' }} />
-              </div>
-              <h1 className="text-2xl font-black" style={{ color: 'var(--text-primary)' }}>Admin Dashboard</h1>
-              <span className="px-2 py-0.5 rounded-full text-xs font-semibold"
-                style={{ background: 'rgba(34,197,94,0.1)', border: '1px solid rgba(34,197,94,0.2)', color: '#4ade80' }}>
-                ● Secure
-              </span>
+      {/* ── Stats ── */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        {[
+          { label: 'Total Files', value: files.length, Icon: Files, color: 'rgba(139,92,246,', textColor: '#a78bfa' },
+          { label: 'Total Downloads', value: totalDownloads.toLocaleString(), Icon: TrendingUp, color: 'rgba(6,182,212,', textColor: '#22d3ee' },
+          { label: 'Storage Used', value: formatFileSize(totalSize), Icon: HardDrive, color: 'rgba(249,115,22,', textColor: '#fb923c' },
+          { label: 'Featured', value: files.filter(f => f.is_featured).length, Icon: Star, color: 'rgba(234,179,8,', textColor: '#facc15' },
+        ].map(({ label, value, Icon, color, textColor }) => (
+          <motion.div key={label} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+            className="card p-5 flex items-center gap-4">
+            <div className="p-3 rounded-xl" style={{ background: `${color}0.1)`, border: `1px solid ${color}0.2)` }}>
+              <Icon className="w-5 h-5" style={{ color: textColor }} />
             </div>
-            <p className="text-sm ml-12" style={{ color: 'var(--text-muted)' }}>
-              Authenticated as <span style={{ color: 'var(--accent-primary)' }}>{user?.email}</span>
-            </p>
-          </div>
-          <div className="flex items-center gap-3">
-            <button onClick={() => navigate('/')}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all"
-              style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-glass)', color: 'var(--text-secondary)' }}>
-              <Home className="w-4 h-4" />
-              View Site
-            </button>
-            <button onClick={handleSignOut} id="admin-signout-btn"
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all"
-              style={{ background: 'var(--bg-secondary)', border: '1px solid var(--border-glass)', color: '#f87171' }}>
-              <LogOut className="w-4 h-4" />
-              Sign Out
-            </button>
-          </div>
-        </motion.div>
+            <div>
+              <p className="text-xs" style={{ color: 'var(--text-muted)' }}>{label}</p>
+              <p className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>{value}</p>
+            </div>
+          </motion.div>
+        ))}
+      </div>
 
-        {/* ── Stats ── */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          {[
-            { label: 'Total Files', value: files.length, Icon: Files, color: 'rgba(139,92,246,', textColor: '#a78bfa' },
-            { label: 'Total Downloads', value: totalDownloads.toLocaleString(), Icon: TrendingUp, color: 'rgba(6,182,212,', textColor: '#22d3ee' },
-            { label: 'Storage Used', value: formatFileSize(totalSize), Icon: HardDrive, color: 'rgba(249,115,22,', textColor: '#fb923c' },
-            { label: 'Featured', value: files.filter(f => f.is_featured).length, Icon: Star, color: 'rgba(234,179,8,', textColor: '#facc15' },
-          ].map(({ label, value, Icon, color, textColor }) => (
-            <motion.div key={label} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-              className="card p-5 flex items-center gap-4">
-              <div className="p-3 rounded-xl" style={{ background: `${color}0.1)`, border: `1px solid ${color}0.2)` }}>
-                <Icon className="w-5 h-5" style={{ color: textColor }} />
-              </div>
-              <div>
-                <p className="text-xs" style={{ color: 'var(--text-muted)' }}>{label}</p>
-                <p className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>{value}</p>
-              </div>
-            </motion.div>
-          ))}
+      {/* ── Upload + Table ── */}
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+        <div className="lg:col-span-2">
+          <UploadForm onUpload={uploadFile} uploading={uploading} uploadProgress={uploadProgress} />
         </div>
 
-        {/* ── Upload + Table ── */}
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
-          <div className="lg:col-span-2">
-            <UploadForm onUpload={uploadFile} uploading={uploading} uploadProgress={uploadProgress} />
-          </div>
+        <div className="lg:col-span-3">
+          <div className="card overflow-hidden h-full flex flex-col">
+            <div className="p-5 flex items-center justify-between gap-3"
+              style={{ borderBottom: '1px solid var(--border-glass)' }}>
+              <h2 className="font-bold flex items-center gap-2" style={{ color: 'var(--text-primary)' }}>
+                All Files
+                <span className="text-xs font-normal bg-[var(--bg-secondary)] px-2 py-0.5 rounded-full border border-[var(--border-glass)]" style={{ color: 'var(--text-muted)' }}>
+                  {filteredFiles.length}
+                </span>
+              </h2>
+              <input type="text" value={tableSearch} onChange={(e) => setTableSearch(e.target.value)}
+                placeholder="Search…" id="admin-table-search"
+                className="input-base px-3 py-2 text-xs w-48" />
+            </div>
 
-          <div className="lg:col-span-3">
-            <div className="card overflow-hidden">
-              <div className="p-5 flex items-center justify-between gap-3"
-                style={{ borderBottom: '1px solid var(--border-glass)' }}>
-                <h2 className="font-bold" style={{ color: 'var(--text-primary)' }}>
-                  All Files
-                  <span className="ml-2 text-xs font-normal" style={{ color: 'var(--text-muted)' }}>({filteredFiles.length})</span>
-                </h2>
-                <input type="text" value={tableSearch} onChange={(e) => setTableSearch(e.target.value)}
-                  placeholder="Search…" id="admin-table-search"
-                  className="input-base px-3 py-2 text-xs w-36" />
-              </div>
-
+            <div className="flex-1 overflow-y-auto min-h-[400px]">
               {loading ? (
                 <div className="flex items-center justify-center py-20">
                   <div className="w-8 h-8 border-2 border-t-purple-500 rounded-full spinner"
@@ -406,30 +368,28 @@ const SecureAdminPage = () => {
                 </div>
               ) : filteredFiles.length === 0 ? (
                 <div className="flex flex-col items-center gap-3 py-16 text-center px-4">
-                  <Files className="w-10 h-10" style={{ color: 'var(--text-muted)' }} />
-                  <p className="text-sm" style={{ color: 'var(--text-muted)' }}>No files yet. Upload your first file!</p>
+                  <Files className="w-10 h-10 opacity-50" style={{ color: 'var(--text-muted)' }} />
+                  <p className="text-sm" style={{ color: 'var(--text-muted)' }}>No files matching criteria.</p>
                 </div>
               ) : (
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left">
-                    <thead>
-                      <tr style={{ borderBottom: '1px solid var(--border-glass)' }}>
-                        {['File', 'Category', 'Size', 'DLs', 'Date', 'Actions'].map((h) => (
-                          <th key={h} className="px-4 py-3 text-xs font-semibold uppercase tracking-wider"
-                            style={{ color: 'var(--text-muted)' }}>{h}</th>
-                        ))}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <AnimatePresence>
-                        {filteredFiles.map((file) => (
-                          <FileRow key={file.id} file={file} onEdit={setEditingFile}
-                            onDelete={handleDelete} onToggleFeatured={handleToggleFeatured} />
-                        ))}
-                      </AnimatePresence>
-                    </tbody>
-                  </table>
-                </div>
+                <table className="w-full text-left">
+                  <thead className="bg-[var(--bg-secondary)] sticky top-0 z-10">
+                    <tr>
+                      {['File', 'Category', 'Size', 'DLs', 'Date', 'Actions'].map((h) => (
+                        <th key={h} className="px-4 py-3 text-xs font-semibold uppercase tracking-wider"
+                          style={{ color: 'var(--text-muted)' }}>{h}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <AnimatePresence>
+                      {filteredFiles.map((file) => (
+                        <FileRow key={file.id} file={file} onEdit={setEditingFile}
+                          onDelete={handleDelete} onToggleFeatured={handleToggleFeatured} />
+                      ))}
+                    </AnimatePresence>
+                  </tbody>
+                </table>
               )}
             </div>
           </div>
@@ -446,4 +406,4 @@ const SecureAdminPage = () => {
   )
 }
 
-export default SecureAdminPage
+export default AdminStlFilesPage

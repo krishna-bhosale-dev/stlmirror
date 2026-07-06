@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import {
   Sun, Moon, Search, Shield, Menu, X, Zap, LogOut,
   ChevronDown, Smartphone, FileText, Code,
-  TrendingUp, Clock, RefreshCw, Cpu
+  TrendingUp, Clock, RefreshCw, Cpu, Box
 } from 'lucide-react'
 import { useTheme } from '../../context/ThemeContext'
 import { useAuth } from '../../context/AuthContext'
@@ -134,6 +134,12 @@ const Navbar = ({ onSearch, searchQuery }) => {
                 className="px-3 py-2 rounded-xl text-sm font-medium transition-all"
                 style={isActive('/') && location.pathname === '/' ? activeLinkStyle : navLinkStyle}>
                 Home
+              </Link>
+
+              <Link to="/stl-files" id="nav-stl-files"
+                className="px-3 py-2 rounded-xl text-sm font-medium transition-all"
+                style={isActive('/stl-files') ? activeLinkStyle : navLinkStyle}>
+                STL Files
               </Link>
 
               <Link to="/ai-tools" id="nav-ai-tools"
@@ -279,6 +285,7 @@ const Navbar = ({ onSearch, searchQuery }) => {
               <div className="px-4 py-4 space-y-1 max-h-[70vh] overflow-y-auto">
                 {[
                   { label: 'Home', href: '/' },
+                  { label: 'STL Files', href: '/stl-files' },
                   { label: 'AI Tools', href: '/ai-tools' },
                   { label: 'Blog', href: '/blog' },
                   { label: 'Software Hub', href: '/software' },
