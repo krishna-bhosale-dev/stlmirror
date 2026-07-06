@@ -1,0 +1,79 @@
+/* ─── Adsterra Ad Container Styles ───────────────────────────────────────── */
+
+/* --- Responsive visibility helpers --- */
+.ad-desktop-only {
+  display: flex;
+}
+.ad-mobile-only {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .ad-desktop-only {
+    display: none !important;
+  }
+  .ad-mobile-only {
+    display: flex !important;
+  }
+
+  /* Push page content up so sticky 320x50 bar doesn't overlap footer */
+  body {
+    padding-bottom: 58px;
+  }
+}
+
+/* --- Base wrapper for all banner ads --- */
+.ad-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* --- 728x90 Banner (desktop only, below hero) --- */
+.ad-banner-728 {
+  min-height: 90px;
+  margin: 16px auto;
+  max-width: 100%;
+}
+
+/* --- 300x250 Banner --- */
+.ad-banner-300 {
+  min-height: 250px;
+  margin: 0 auto;
+  max-width: 300px;
+  width: 300px;
+}
+
+/* --- 320x50 Banner (mobile sticky bottom) --- */
+.ad-banner-320 {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  min-height: 50px;
+  z-index: 999;
+  background: var(--bg-primary, #0d0d0f);
+  border-top: 1px solid var(--border-glass, rgba(255,255,255,0.08));
+  padding: 4px 0;
+  justify-content: center;
+}
+
+/* --- Native Banner --- */
+.ad-native-banner {
+  min-height: 120px;
+  margin: 16px 0;
+  width: 100%;
+}
+
+/* --- Prevent layout shift — iframe/ins fill --- */
+.ad-wrapper iframe,
+.ad-wrapper ins,
+.ad-banner-300 iframe,
+.ad-banner-300 ins,
+.ad-banner-728 iframe,
+.ad-banner-728 ins {
+  display: block;
+  max-width: 100%;
+}

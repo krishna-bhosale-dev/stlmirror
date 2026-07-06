@@ -5,6 +5,9 @@ import { AuthProvider, useAuth } from './context/AuthContext'
 import { ThemeProvider } from './context/ThemeContext'
 import Navbar from './components/layout/Navbar'
 import Footer from './components/layout/Footer'
+import SocialBar from './components/ads/SocialBar'
+import Banner320 from './components/ads/Banner320'
+import './components/ads/ads.css'
 
 // Existing pages
 import HomePage from './pages/HomePage'
@@ -152,6 +155,12 @@ const App = () => (
             error: { iconTheme: { primary: '#ef4444', secondary: 'white' } },
           }}
         />
+
+        {/* ── Global Ad Units ── */}
+        {/* SocialBar: loads its script once globally, renders no DOM itself */}
+        <SocialBar />
+        {/* Banner320: mobile-only sticky bottom bar, hidden on desktop via CSS */}
+        <Banner320 />
       </AuthProvider>
     </ThemeProvider>
   </BrowserRouter>

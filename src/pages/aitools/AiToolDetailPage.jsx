@@ -6,6 +6,7 @@ import SEOHead from '../../components/seo/SEOHead'
 import Breadcrumb from '../../components/common/Breadcrumb'
 import Badge from '../../components/common/Badge'
 import { getFallbackImage, handleImageError } from '../../utils/fallbackImages'
+import NativeBanner from '../../components/ads/NativeBanner'
 
 const RelatedToolCard = ({ tool }) => (
   <Link to={`/ai-tools/${tool.slug}`}
@@ -185,6 +186,9 @@ const AiToolDetailPage = () => {
                 }}
                 dangerouslySetInnerHTML={{ __html: tool.content }}
               />
+
+              {/* Native Banner ─ below article content, above tags */}
+              <NativeBanner />
 
               {/* Tags */}
               <div className="flex flex-wrap gap-2 mt-10 pt-8" style={{ borderTop: '1px solid var(--border-glass)' }}>

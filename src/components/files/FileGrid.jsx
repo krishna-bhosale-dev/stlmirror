@@ -2,6 +2,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import FileCard from './FileCard'
 import { FileSkeletonGrid } from './FileSkeleton'
 import { FolderOpen, RefreshCw } from 'lucide-react'
+import Banner300 from '../ads/Banner300'
 
 const container = {
   hidden: {},
@@ -41,18 +42,33 @@ const FileGrid = ({ files, loading, hasMore, onLoadMore, onDownload, error }) =>
 
   return (
     <div className="space-y-8">
-      <motion.div
-        variants={container}
-        initial="hidden"
-        animate="show"
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5"
-      >
-        <AnimatePresence mode="popLayout">
-          {files.map((file) => (
-            <FileCard key={file.id} file={file} onDownload={onDownload} />
-          ))}
-        </AnimatePresence>
-      </motion.div>
+      {/* Render file cards in chunks of 12, inserting a Banner300 between chunks */}
+      {Array.from({ length: Math.ceil(files.length / 12) }, (_, chunkIndex) => {
+        const chunk = files.slice(chunkIndex * 12, chunkIndex * 12 + 12)
+        const isNotLastChunk = chunkIndex < Math.ceil(files.length / 12) - 1
+        return (
+          <div key={chunkIndex} className="space-y-8">
+            <motion.div
+              variants={container}
+              initial="hidden"
+              animate="show"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5"
+            >
+              <AnimatePresence mode="popLayout">
+                {chunk.map((file) => (
+                  <FileCard key={file.id} file={file} onDownload={onDownload} />
+                ))}
+              </AnimatePresence>
+            </motion.div>
+            {/* Insert 300x250 ad between chunks — NOT after the last chunk */}
+            {isNotLastChunk && (
+              <div className="flex justify-center py-4">
+                <Banner300 />
+              </div>
+            )}
+          </div>
+        )
+      })}
 
       {/* Load more */}
       {hasMore && (

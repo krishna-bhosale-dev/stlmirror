@@ -8,6 +8,7 @@ import SearchBar from '../components/search/SearchBar'
 import FileCard from '../components/files/FileCard'
 import { FileSkeletonGrid } from '../components/files/FileSkeleton'
 import { supabase } from '../config/supabase'
+import Banner728 from '../components/ads/Banner728'
 
 const StatBadge = ({ icon: Icon, label, value }) => (
   <div className="flex items-center gap-2 glass rounded-full px-4 py-2">
@@ -141,6 +142,9 @@ const HomePage = ({ externalSearch }) => {
           </motion.div>
         </div>
       </section>
+
+      {/* ─── 728x90 Leaderboard ─── Desktop only, between hero and content ─── */}
+      <Banner728 />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
         {/* ─── Trending ───────────────────────────────────────── */}

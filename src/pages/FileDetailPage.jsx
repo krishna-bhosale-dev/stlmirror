@@ -12,6 +12,8 @@ import {
   formatFileSize, formatDate, formatDownloads,
   getExtensionColor,
 } from '../utils/formatters'
+import NativeBanner from '../components/ads/NativeBanner'
+import Banner300 from '../components/ads/Banner300'
 
 const MetaRow = ({ icon: Icon, label, value }) => (
   <div className="flex items-center justify-between py-3 border-b border-[var(--border-glass)] last:border-0">
@@ -174,6 +176,12 @@ const FileDetailPage = () => {
             className="lg:col-span-2 space-y-5"
           >
             <div className="space-y-3">
+              {/* Native Banner ─ below description, above Download */}
+              <NativeBanner />
+
+              {/* 300x250 Banner ─ above Download button */}
+              <Banner300 />
+
               {/* Download Button */}
               <button
                 onClick={handleDownload}
