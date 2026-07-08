@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { X, Save, AlertCircle } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -18,12 +18,19 @@ const CrudModal = ({
   const [isSaving, setIsSaving] = useState(false)
   const [error, setError] = useState(null)
 
+  // Track whether we have already initialised formData for the current open session.
+  // This prevents the form from being wiped when the parent re-renders (e.g. because
+  // Supabase fires onAuthStateChange on tab switch, which causes AuthContext to call
+  // setState and re-create the `fields` array reference — previously that re-triggered
+  // this effect and reset every field the user had typed).
+  const initializedRef = useRef(false)
+
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && !initializedRef.current) {
+      // First time opening: seed form with existing data or blank values.
       if (initialData) {
         setFormData(initialData)
       } else {
-        // Initialize empty strings for all fields
         const emptyData = {}
         fields.forEach(f => {
           emptyData[f.key] = f.type === 'select' && f.options?.length > 0 ? f.options[0] : ''
@@ -31,8 +38,17 @@ const CrudModal = ({
         setFormData(emptyData)
       }
       setError(null)
+      initializedRef.current = true
     }
-  }, [isOpen, initialData, fields])
+
+    if (!isOpen) {
+      // Modal closed — reset the flag so the next open starts fresh.
+      initializedRef.current = false
+    }
+  }, [isOpen]) // eslint-disable-line react-hooks/exhaustive-deps
+  // ^ intentionally omit `fields` and `initialData` from deps:
+  //   they are read once on open and must NOT cause a re-initialisation
+  //   while the user is actively filling the form.
 
   const handleChange = (key, value) => {
     setFormData(prev => ({ ...prev, [key]: value }))
