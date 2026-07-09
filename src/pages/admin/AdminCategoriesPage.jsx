@@ -43,7 +43,7 @@ const AdminCategoriesPage = () => {
 
         <div className="card p-6">
           <h2 className="font-bold text-[var(--text-primary)] mb-4 flex items-center gap-2">
-            <Tags className="w-4 h-4 text-blue-400" /> Premium Downloads
+            <Tags className="w-4 h-4 text-blue-400" /> Free Resources
           </h2>
           <ul className="space-y-2 text-sm text-[var(--text-secondary)]">
             <li>Themes</li>
@@ -56,7 +56,7 @@ const AdminCategoriesPage = () => {
 
         <div className="card p-6">
           <h2 className="font-bold text-[var(--text-primary)] mb-4 flex items-center gap-2">
-            <Tags className="w-4 h-4 text-green-400" /> Website Links
+            <Tags className="w-4 h-4 text-green-400" /> Web Directory
           </h2>
           <ul className="space-y-2 text-sm text-[var(--text-secondary)]">
             <li>Design</li>

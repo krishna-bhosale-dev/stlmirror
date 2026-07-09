@@ -77,8 +77,8 @@ const AdminApksPage = () => {
   return (
     <div className="h-full flex flex-col space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-[var(--text-primary)] mb-2">APK Downloads</h1>
-        <p className="text-[var(--text-secondary)] text-sm">Manage Android APK files and apps.</p>
+        <h1 className="text-2xl font-bold text-[var(--text-primary)] mb-2">Android Apps</h1>
+        <p className="text-[var(--text-secondary)] text-sm">Manage Android app listings and download links.</p>
       </div>
 
       <div className="flex-1 min-h-0">
@@ -89,11 +89,11 @@ const AdminApksPage = () => {
           onAddNew={() => { setEditingItem(null); setIsModalOpen(true) }}
           onEdit={(item) => { setEditingItem(item); setIsModalOpen(true) }}
           onDelete={handleDelete} onToggleFeatured={toggleFeatured} onToggleStatus={toggleStatus}
-          addButtonText="Add APK"
+          addButtonText="Add App"
         />
       </div>
 
-      <CrudModal isOpen={isModalOpen} onClose={onClose} title="APK Item" initialData={editingItem} fields={fields} onSave={handleSave} />
+      <CrudModal isOpen={isModalOpen} onClose={onClose} title="Android App" initialData={editingItem} fields={fields} onSave={handleSave} />
     </div>
   )
 }

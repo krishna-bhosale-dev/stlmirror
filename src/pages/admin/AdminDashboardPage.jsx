@@ -50,9 +50,9 @@ const AdminDashboardPage = () => {
 
   const statItems = [
     { title: 'STL Files', value: stats.files, icon: Files, link: '/secure-admin-upload/stl-files', color: { bg: 'bg-orange-500/10', text: 'text-orange-400' } },
-    { title: 'Premium Downloads', value: stats.premium, icon: Download, link: '/secure-admin-upload/premium-downloads', color: { bg: 'bg-blue-500/10', text: 'text-blue-400' } },
-    { title: 'Website Links', value: stats.links, icon: LinkIcon, link: '/secure-admin-upload/website-links', color: { bg: 'bg-green-500/10', text: 'text-green-400' } },
-    { title: 'APK Items', value: stats.apks, icon: Smartphone, link: '/secure-admin-upload/apks', color: { bg: 'bg-purple-500/10', text: 'text-purple-400' } },
+    { title: 'Free Resources', value: stats.premium, icon: Download, link: '/secure-admin-upload/premium-downloads', color: { bg: 'bg-blue-500/10', text: 'text-blue-400' } },
+    { title: 'Web Directory', value: stats.links, icon: LinkIcon, link: '/secure-admin-upload/website-links', color: { bg: 'bg-green-500/10', text: 'text-green-400' } },
+    { title: 'Android Apps', value: stats.apks, icon: Smartphone, link: '/secure-admin-upload/apks', color: { bg: 'bg-purple-500/10', text: 'text-purple-400' } },
     { title: 'AI Tools', value: aiToolsList.length, icon: Bot, link: '/secure-admin-upload/ai-tools', color: { bg: 'bg-cyan-500/10', text: 'text-cyan-400' } },
     { title: 'Blog Posts', value: allPosts.length, icon: PenTool, link: '/secure-admin-upload/blogs', color: { bg: 'bg-pink-500/10', text: 'text-pink-400' } },
   ]
@@ -78,7 +78,7 @@ const AdminDashboardPage = () => {
           <div>
             <h3 className="font-bold text-[var(--text-primary)] mb-2">System Status: Healthy</h3>
             <p className="text-[var(--text-secondary)] text-sm leading-relaxed mb-4">
-              The website structure has been updated. STL Files, Premium Downloads, Website Links, and APKs can be managed directly through this dashboard.
+              STL Files, Free Resources, Web Directory, and Android Apps can be managed directly through this dashboard.
               <br/><br/>
               Note: AI Tools and Blog Posts are managed via static code deployments. You can view them here, but adding or editing requires pushing code changes to GitHub.
             </p>

@@ -20,9 +20,9 @@ const AdminSidebar = ({ isOpen, onClose }) => {
   const navItems = [
     { name: 'Dashboard', path: '/secure-admin-upload', icon: LayoutDashboard, exact: true },
     { name: 'STL Files', path: '/secure-admin-upload/stl-files', icon: Files },
-    { name: 'Premium Downloads', path: '/secure-admin-upload/premium-downloads', icon: Download },
-    { name: 'Website Links', path: '/secure-admin-upload/website-links', icon: LinkIcon },
-    { name: 'APK Items', path: '/secure-admin-upload/apks', icon: Smartphone },
+    { name: 'Free Resources', path: '/secure-admin-upload/premium-downloads', icon: Download },
+    { name: 'Web Directory', path: '/secure-admin-upload/website-links', icon: LinkIcon },
+    { name: 'Android Apps', path: '/secure-admin-upload/apks', icon: Smartphone },
     { name: 'AI Tools', path: '/secure-admin-upload/ai-tools', icon: Bot },
     { name: 'Blogs', path: '/secure-admin-upload/blogs', icon: PenTool },
     { name: 'Categories', path: '/secure-admin-upload/categories', icon: Tags },

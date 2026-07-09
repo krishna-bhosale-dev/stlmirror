@@ -73,8 +73,8 @@ const AdminWebsiteLinksPage = () => {
   return (
     <div className="h-full flex flex-col space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-[var(--text-primary)] mb-2">Website Links</h1>
-        <p className="text-[var(--text-secondary)] text-sm">Manage curated website bookmarks and resources.</p>
+        <h1 className="text-2xl font-bold text-[var(--text-primary)] mb-2">Web Directory</h1>
+        <p className="text-[var(--text-secondary)] text-sm">Manage your website bookmarks and resource links.</p>
       </div>
 
       <div className="flex-1 min-h-0">

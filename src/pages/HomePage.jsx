@@ -164,10 +164,10 @@ const HomePage = ({ externalSearch }) => {
         {/* Blogs */}
         <HomeBlogSection />
 
-        {/* Premium Downloads */}
+        {/* Free Resources */}
         <HomePlaceholderSection 
           items={premiumDownloads}
-          title="Premium Downloads"
+          title="Free Resources"
           icon={Download}
           linkTo="/premium-downloads"
           colorClass="text-blue-400"
@@ -192,10 +192,10 @@ const HomePage = ({ externalSearch }) => {
           )}
         />
 
-        {/* Website Links */}
+        {/* Web Directory */}
         <HomePlaceholderSection 
           items={websiteLinks}
-          title="Curated Websites"
+          title="Web Directory"
           icon={LinkIcon}
           linkTo="/website-links"
           colorClass="text-green-400"
@@ -217,10 +217,10 @@ const HomePage = ({ externalSearch }) => {
           )}
         />
 
-        {/* APKs */}
+        {/* Android Apps */}
         <HomePlaceholderSection 
           items={apks}
-          title="Latest APKs"
+          title="Android Apps"
           icon={Smartphone}
           linkTo="/apks"
           colorClass="text-purple-400"

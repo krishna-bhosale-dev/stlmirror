@@ -95,8 +95,8 @@ const AdminPremiumDownloadsPage = () => {
   return (
     <div className="h-full flex flex-col space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-[var(--text-primary)] mb-2">Premium Downloads</h1>
-        <p className="text-[var(--text-secondary)] text-sm">Manage premium digital products and assets.</p>
+        <h1 className="text-2xl font-bold text-[var(--text-primary)] mb-2">Free Resources</h1>
+        <p className="text-[var(--text-secondary)] text-sm">Manage free digital assets and downloadable resources.</p>
       </div>
 
       <div className="flex-1 min-h-0">
@@ -123,7 +123,7 @@ const AdminPremiumDownloadsPage = () => {
       <CrudModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        title="Premium Download"
+        title="Free Resource"
         initialData={editingItem}
         fields={fields}
         onSave={handleSave}
