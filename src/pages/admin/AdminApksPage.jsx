@@ -12,40 +12,132 @@ const API_BASE = import.meta.env.VITE_API_BASE || ''
 
 // ─── Upload APK file to Cloudflare R2, returns public URL ────────────────────
 async function uploadApkToR2(file, token) {
+  // ── Validate preconditions ────────────────────────────────────────────────
+  if (!file) throw new Error('No APK file provided')
+  if (!token) throw new Error('Not authenticated — please log out and log back in')
+  if (file.size === 0) throw new Error('APK file is empty (0 bytes)')
+  if (file.size > 1024 * 1024 * 1024) throw new Error(`APK file too large: ${(file.size / 1024 / 1024).toFixed(1)} MB (max 1 GB)`)
+
   const safeFilename = generateSafeFilename(file.name)
   const contentType = file.type || 'application/vnd.android.package-archive'
 
-  // Phase 1: Get presigned URL
-  const presignRes = await fetch(`${API_BASE}/api/upload`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    },
-    body: JSON.stringify({ key: safeFilename, contentType }),
-  })
+  // DEBUG: log what we're about to upload
+  console.log('[APK Upload] File:', file.name, '|', (file.size / 1024 / 1024).toFixed(2), 'MB | type:', contentType)
+  console.log('[APK Upload] Safe filename:', safeFilename)
+  console.log('[APK Upload] Requesting presigned URL from:', `${API_BASE}/api/upload`)
 
-  if (!presignRes.ok) {
-    const body = await presignRes.json().catch(() => ({}))
-    throw new Error(body.error || `Failed to get upload URL (HTTP ${presignRes.status})`)
+  // ── Phase 1: Get presigned PUT URL from our API ───────────────────────────
+  let presignData
+  try {
+    const presignRes = await fetch(`${API_BASE}/api/upload`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ key: safeFilename, contentType }),
+    })
+
+    console.log('[APK Upload] Presign API response status:', presignRes.status)
+
+    if (!presignRes.ok) {
+      const body = await presignRes.json().catch(() => ({}))
+      const msg = body.error || `API returned HTTP ${presignRes.status}`
+      if (presignRes.status === 401) throw new Error(`Unauthorized — session may have expired. ${msg}`)
+      if (presignRes.status === 403) throw new Error(`Access denied — admin only. ${msg}`)
+      if (presignRes.status === 500) throw new Error(`Server error generating upload URL. ${msg}`)
+      throw new Error(`Failed to get upload URL: ${msg}`)
+    }
+
+    presignData = await presignRes.json()
+    console.log('[APK Upload] Presigned URL obtained. Public URL will be:', presignData.publicUrl)
+  } catch (err) {
+    // Re-throw fetch-level errors (e.g. server not running locally)
+    if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError')) {
+      throw new Error(
+        'Cannot reach the upload API. ' +
+        (window.location.hostname === 'localhost'
+          ? 'Is the local API server running? Start it with: npm run server'
+          : 'Check your network connection or try again.')
+      )
+    }
+    throw err
   }
 
-  const { presignedUrl, publicUrl } = await presignRes.json()
+  const { presignedUrl, publicUrl } = presignData
 
-  // Phase 2: PUT file to R2 via XHR (supports progress)
+  // ── Phase 2: PUT the raw APK bytes directly to R2 via presigned URL ───────
+  // XHR is used so we can read the actual HTTP status on failure.
+  // NOTE: If you see "Network error" here on localhost, it means the R2 bucket
+  // CORS policy does not include http://localhost:5173.
+  // Fix: Add localhost to the bucket CORS rules in the Cloudflare R2 dashboard.
+  console.log('[APK Upload] Starting XHR PUT to R2 presigned URL…')
+
   await new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest()
+
     xhr.addEventListener('load', () => {
-      if (xhr.status >= 200 && xhr.status < 300) resolve()
-      else reject(new Error(`APK upload to storage failed (HTTP ${xhr.status})`))
+      console.log('[APK Upload] XHR load event — HTTP status:', xhr.status)
+      if (xhr.status >= 200 && xhr.status < 300) {
+        resolve()
+      } else {
+        // Try to extract an error message from R2's XML error body
+        let detail = `HTTP ${xhr.status}`
+        try {
+          const match = xhr.responseText.match(/<Message>([^<]+)<\/Message>/)
+          if (match) detail += ` — R2: ${match[1]}`
+        } catch {}
+        if (xhr.status === 403) {
+          reject(new Error(`R2 upload rejected (403 Forbidden). ${detail} — Check bucket credentials or CORS policy.`))
+        } else if (xhr.status === 400) {
+          reject(new Error(`R2 upload bad request (400). ${detail} — Presigned URL may be malformed.`))
+        } else {
+          reject(new Error(`R2 upload failed. ${detail}`))
+        }
+      }
     })
-    xhr.addEventListener('error', () => reject(new Error('Network error during APK upload')))
-    xhr.addEventListener('abort', () => reject(new Error('APK upload aborted')))
+
+    xhr.addEventListener('error', () => {
+      // XHR fires 'error' (not 'load') for network-level failures:
+      //   • CORS preflight blocked by R2 (origin not in bucket CORS rules)
+      //   • Connection refused / timeout
+      //   • SSL certificate error
+      const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+      if (isLocalhost) {
+        reject(new Error(
+          'Upload blocked — R2 CORS does not allow localhost. ' +
+          'Add http://localhost:5173 to the bucket CORS rules in the Cloudflare dashboard, ' +
+          'or use an external URL instead. See console for details.'
+        ))
+      } else {
+        reject(new Error(
+          'Upload network error — the file could not be sent to Cloudflare R2. ' +
+          'Possible causes: CORS policy, network interruption, or firewall. ' +
+          'Check browser console → Network tab for the failed PUT request details.'
+        ))
+      }
+      console.error('[APK Upload] XHR network error. Presigned URL host:', new URL(presignedUrl).hostname)
+      console.error('[APK Upload] If this is a CORS error, add your origin to the R2 bucket CORS rules.')
+    })
+
+    xhr.addEventListener('abort', () => {
+      console.warn('[APK Upload] XHR aborted')
+      reject(new Error('Upload was cancelled'))
+    })
+
+    xhr.addEventListener('timeout', () => {
+      console.warn('[APK Upload] XHR timed out')
+      reject(new Error('Upload timed out — the file may be too large or the connection too slow'))
+    })
+
     xhr.open('PUT', presignedUrl)
     xhr.setRequestHeader('Content-Type', contentType)
+    // Do NOT set extra headers — only Content-Type is allowed by the presigned URL signature
     xhr.send(file)
+    console.log('[APK Upload] XHR PUT sent, waiting for response…')
   })
 
+  console.log('[APK Upload] ✅ Upload complete. Public URL:', publicUrl)
   return publicUrl
 }
 
