@@ -5,6 +5,7 @@ import {
   S3Client,
   PutObjectCommand,
   DeleteObjectCommand,
+  HeadBucketCommand,
 } from '@aws-sdk/client-s3'
 import { createClient } from '@supabase/supabase-js'
 
@@ -102,6 +103,58 @@ app.use(express.json())
 // ─── Health Check ─────────────────────────────────────────────────────────────
 app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok', bucket: R2_BUCKET_NAME })
+})
+
+// ─── R2 Health Check ──────────────────────────────────────────────────────────
+app.get('/api/r2-health', requireAdmin, async (req, res) => {
+  try {
+    const required = {
+      CLOUDFLARE_ACCOUNT_ID,
+      R2_ACCESS_KEY_ID,
+      R2_SECRET_ACCESS_KEY,
+      R2_BUCKET_NAME,
+    }
+    for (const [name, value] of Object.entries(required)) {
+      if (!value) {
+        return res.status(500).json({
+          ok: false,
+          stage: 'env',
+          error: `Environment variable "${name}" is not set on the server.`,
+          hint: `Add ${name} to your .env file.`,
+        })
+      }
+    }
+
+    await r2.send(new HeadBucketCommand({ Bucket: R2_BUCKET_NAME }))
+
+    const publicUrl = getPublicUrl('')
+    return res.status(200).json({
+      ok: true,
+      bucket: R2_BUCKET_NAME,
+      publicUrl,
+      endpoint: `https://${CLOUDFLARE_ACCOUNT_ID}.r2.cloudflarestorage.com`,
+    })
+  } catch (err) {
+    console.error('[r2-health] HeadBucket failed:', err.name, err.message)
+
+    const httpStatus = err.$metadata?.httpStatusCode
+    const code = err.name || err.Code || ''
+
+    if (code === 'NoSuchBucket' || httpStatus === 404) {
+      return res.status(500).json({ ok: false, stage: 'r2', error: `Bucket "${R2_BUCKET_NAME}" does not exist in Cloudflare R2.`, hint: `Verify the R2_BUCKET_NAME env var.`, code })
+    }
+    if (code === 'InvalidAccessKeyId' || httpStatus === 403) {
+      return res.status(500).json({ ok: false, stage: 'r2', error: 'Cloudflare R2 returned 403 Forbidden — the Access Key ID is invalid or does not have permission.', hint: 'Check R2_ACCESS_KEY_ID and R2_SECRET_ACCESS_KEY.', code })
+    }
+    if (code === 'SignatureDoesNotMatch') {
+      return res.status(500).json({ ok: false, stage: 'r2', error: 'Cloudflare R2 signature mismatch — R2_SECRET_ACCESS_KEY is incorrect.', hint: 'Regenerate an R2 API token.', code })
+    }
+    if (code === 'InvalidEndpoint' || code === 'ERR_INVALID_URL') {
+      return res.status(500).json({ ok: false, stage: 'r2', error: `Invalid R2 endpoint — CLOUDFLARE_ACCOUNT_ID "${CLOUDFLARE_ACCOUNT_ID}" may be wrong.`, hint: 'Find your Account ID in Cloudflare.', code })
+    }
+
+    return res.status(500).json({ ok: false, stage: 'r2', error: `Cloudflare R2 error: ${err.message}`, code, httpStatus: httpStatus || null, hint: 'Check server logs.' })
+  }
 })
 
 // ─── Upload Route ─────────────────────────────────────────────────────────────

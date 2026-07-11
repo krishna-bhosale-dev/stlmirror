@@ -24,9 +24,27 @@ async function uploadApkToR2(file, token) {
   // DEBUG: log what we're about to upload
   console.log('[APK Upload] File:', file.name, '|', (file.size / 1024 / 1024).toFixed(2), 'MB | type:', contentType)
   console.log('[APK Upload] Safe filename:', safeFilename)
-  console.log('[APK Upload] Requesting presigned URL from:', `${API_BASE}/api/upload`)
+
+  // ── Phase 0: Pre-flight Health Check ──────────────────────────────────────
+  console.log('[APK Upload] Running pre-flight R2 health check...')
+  try {
+    const healthRes = await fetch(`${API_BASE}/api/r2-health`, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+    const healthData = await healthRes.json().catch(() => null)
+    if (!healthRes.ok || (healthData && !healthData.ok)) {
+      const msg = healthData?.error || `Health check failed with HTTP ${healthRes.status}`
+      const hint = healthData?.hint ? `\nHint: ${healthData.hint}` : ''
+      throw new Error(`[Pre-flight Error] ${msg}${hint}`)
+    }
+    console.log('[APK Upload] Health check passed:', healthData)
+  } catch (err) {
+    if (err.message.includes('[Pre-flight Error]')) throw err
+    console.warn('[APK Upload] Health check unreachable, proceeding anyway...', err)
+  }
 
   // ── Phase 1: Get presigned PUT URL from our API ───────────────────────────
+  console.log('[APK Upload] Requesting presigned URL from:', `${API_BASE}/api/upload`)
   let presignData
   try {
     const presignRes = await fetch(`${API_BASE}/api/upload`, {
