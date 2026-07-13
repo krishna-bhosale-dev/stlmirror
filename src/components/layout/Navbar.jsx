@@ -212,7 +212,7 @@ const Navbar = ({ onSearch, searchQuery }) => {
             </nav>
 
             {/* Desktop Search */}
-            <div className="hidden md:flex lg:flex flex-1 max-w-xs mx-4">
+            <div className="hidden lg:flex flex-1 max-w-xs mx-4">
               <SearchBar value={searchQuery || ''} onChange={handleSearch}
                 placeholder="Search files…" className="w-full" />
             </div>
@@ -221,7 +221,7 @@ const Navbar = ({ onSearch, searchQuery }) => {
             <div className="flex items-center gap-1.5">
               {/* Mobile search toggle */}
               <button onClick={() => setShowSearch(p => !p)} id="mobile-search-btn"
-                className="md:hidden p-2.5 rounded-xl transition-all"
+                className="lg:hidden p-2.5 rounded-xl transition-all"
                 style={{ color: 'var(--text-muted)' }} aria-label="Toggle search">
                 <Search className="w-5 h-5" />
               </button>
@@ -269,7 +269,7 @@ const Navbar = ({ onSearch, searchQuery }) => {
           <AnimatePresence>
             {showSearch && (
               <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }} className="md:hidden overflow-hidden pb-3">
+                exit={{ height: 0, opacity: 0 }} className="lg:hidden overflow-hidden pb-3">
                 <SearchBar value={searchQuery || ''} onChange={handleSearch} placeholder="Search files…" />
               </motion.div>
             )}

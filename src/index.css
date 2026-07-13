@@ -409,3 +409,27 @@ body {
   font-size: 0.875rem;
 }
 
+
+/* ─── Download Button — always visible on touch devices ──────────── */
+/* On desktop (hover-capable), show only on card hover for clean look */
+@media (hover: hover) {
+  .group:not(:hover) .download-btn {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  .download-btn {
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+  .group:hover .download-btn {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* On touch devices — always fully visible */
+@media (hover: none) {
+  .download-btn {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

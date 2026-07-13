@@ -117,7 +117,7 @@ const FileCard = ({ file, onDownload }) => {
               <button
                 onClick={handleDownload}
                 id={`download-${file.id}`}
-                className="btn-primary flex items-center gap-1.5 px-3 py-1.5 text-xs opacity-0 group-hover:opacity-100 transition-all duration-200 translate-y-1 group-hover:translate-y-0"
+                className="btn-primary download-btn flex items-center gap-1.5 px-3 py-1.5 text-xs"
                 aria-label={`Download ${file.title}`}
               >
                 <Download className="w-3.5 h-3.5" />

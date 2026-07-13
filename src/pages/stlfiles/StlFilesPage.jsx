@@ -66,11 +66,11 @@ const StlFilesPage = () => {
           </div>
 
           {/* Header */}
-          <div className="flex items-center gap-3 mb-6">
-            <div className="p-2 rounded-xl bg-cyan-500/10 border border-cyan-500/20">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-2 mb-6">
+            <div className="p-2 rounded-xl bg-cyan-500/10 border border-cyan-500/20 flex-shrink-0">
               <Clock className="w-5 h-5 text-cyan-400" />
             </div>
-            <h2 className="text-xl font-bold text-[var(--text-primary)]">
+            <h2 className="text-xl font-bold text-[var(--text-primary)] min-w-0">
               {searchQuery
                 ? `Results for "${searchQuery}"`
                 : category !== 'all'
@@ -78,11 +78,11 @@ const StlFilesPage = () => {
                 : 'All STL Files'}
             </h2>
             {totalCount > 0 && (
-              <span className="ml-2 text-xs text-[var(--text-muted)] bg-[var(--bg-secondary)] px-2 py-1 rounded-full border border-[var(--border-glass)]">
+              <span className="text-xs text-[var(--text-muted)] bg-[var(--bg-secondary)] px-2 py-1 rounded-full border border-[var(--border-glass)]">
                 {totalCount} files
               </span>
             )}
-            <div className="flex-1 h-px bg-[var(--border-glass)]" />
+            <div className="flex-1 h-px bg-[var(--border-glass)] hidden sm:block" />
           </div>
 
           {/* Filters */}

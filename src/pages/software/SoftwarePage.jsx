@@ -89,9 +89,9 @@ const SoftwarePage = () => {
 
           {/* Category Cards */}
           <section className="mb-14">
-            <div className="flex items-center gap-3 mb-6">
-              <h2 className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>Browse by Category</h2>
-              <div className="flex-1 h-px" style={{ background: 'var(--border-glass)' }} />
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-2 mb-6">
+              <h2 className="text-xl font-bold min-w-0" style={{ color: 'var(--text-primary)' }}>Browse by Category</h2>
+              <div className="flex-1 h-px hidden sm:block" style={{ background: 'var(--border-glass)' }} />
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
               {categoryCards.map(cat => (
@@ -113,9 +113,9 @@ const SoftwarePage = () => {
 
           {/* Quick Links */}
           <section className="mb-14">
-            <div className="flex items-center gap-3 mb-6">
-              <h2 className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>Quick Access</h2>
-              <div className="flex-1 h-px" style={{ background: 'var(--border-glass)' }} />
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-2 mb-6">
+              <h2 className="text-xl font-bold min-w-0" style={{ color: 'var(--text-primary)' }}>Quick Access</h2>
+              <div className="flex-1 h-px hidden sm:block" style={{ background: 'var(--border-glass)' }} />
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {quickLinks.map(link => (
@@ -138,11 +138,11 @@ const SoftwarePage = () => {
 
           {/* Featured Software */}
           <section>
-            <div className="flex items-center gap-3 mb-6">
-              <Star className="w-5 h-5" style={{ color: '#fbbf24' }} />
-              <h2 className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>Featured Software</h2>
-              <div className="flex-1 h-px" style={{ background: 'var(--border-glass)' }} />
-              <Link to="/software" className="text-sm font-medium flex items-center gap-1"
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-2 mb-6">
+              <Star className="w-5 h-5 flex-shrink-0" style={{ color: '#fbbf24' }} />
+              <h2 className="text-xl font-bold min-w-0" style={{ color: 'var(--text-primary)' }}>Featured Software</h2>
+              <div className="flex-1 h-px hidden sm:block" style={{ background: 'var(--border-glass)' }} />
+              <Link to="/software" className="text-sm font-medium flex items-center gap-1 whitespace-nowrap"
                 style={{ color: 'var(--accent-primary)' }}>
                 View All <ChevronRight className="w-4 h-4" />
               </Link>
