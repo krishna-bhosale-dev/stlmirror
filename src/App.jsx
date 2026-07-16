@@ -59,6 +59,11 @@ import LatestSoftwarePage from './pages/software/LatestSoftwarePage'
 import MostDownloadedPage from './pages/software/MostDownloadedPage'
 import RecentlyUpdatedPage from './pages/software/RecentlyUpdatedPage'
 
+// Resources pages
+import WebDirectoryPage from './pages/resources/WebDirectoryPage'
+import PremiumFilesPage from './pages/resources/PremiumFilesPage'
+import CuratedWebsitesPage from './pages/resources/CuratedWebsitesPage'
+
 // ─── Admin-Only Route Guard ───────────────────────────────────────────────────
 const AdminRoute = ({ children }) => {
   const { user, isAdmin, loading } = useAuth()
@@ -119,6 +124,11 @@ const AppLayout = () => {
           <Route path="/latest" element={<LatestSoftwarePage />} />
           <Route path="/most-downloaded" element={<MostDownloadedPage />} />
           <Route path="/recently-updated" element={<RecentlyUpdatedPage />} />
+
+          {/* ── Resources ── */}
+          <Route path="/web-directory" element={<WebDirectoryPage />} />
+          <Route path="/premium-files" element={<PremiumFilesPage />} />
+          <Route path="/curated-websites" element={<CuratedWebsitesPage />} />
 
           {/* ── 404 ── */}
           <Route path="*" element={<NotFoundPage />} />

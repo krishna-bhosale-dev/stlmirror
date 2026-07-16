@@ -4,24 +4,41 @@ import { motion, AnimatePresence } from 'framer-motion'
 import {
   Sun, Moon, Search, Shield, Menu, X, Zap, LogOut,
   ChevronDown, Smartphone, FileText, Code,
-  TrendingUp, Clock, RefreshCw, Cpu, Box
+  TrendingUp, Clock, RefreshCw, Cpu, Box,
+  Bot, Globe, Star, Bookmark, LayoutGrid,
 } from 'lucide-react'
 import { useTheme } from '../../context/ThemeContext'
 import { useAuth } from '../../context/AuthContext'
 import SearchBar from '../search/SearchBar'
 
+/* ─── Static data ─────────────────────────────────────────────────── */
+
 const softwareLinks = [
-  { label: 'Software Hub', href: '/software', icon: Cpu, desc: 'Browse all categories' },
-  { label: 'Android APKs', href: '/apk', icon: Smartphone, desc: 'Emulators & Android apps' },
-  { label: 'PDF Tools', href: '/pdf-tools', icon: FileText, desc: 'Readers, editors & converters' },
-  { label: 'Developer Tools', href: '/developer-tools', icon: Code, desc: 'IDEs, editors & utilities' },
+  { label: 'Software Hub',    href: '/software',          icon: Cpu,       desc: 'Browse all categories' },
+  { label: 'Android APKs',   href: '/apk',               icon: Smartphone, desc: 'Emulators & Android apps' },
+  { label: 'PDF Tools',      href: '/pdf-tools',          icon: FileText,  desc: 'Readers, editors & converters' },
+  { label: 'Developer Tools',href: '/developer-tools',    icon: Code,      desc: 'IDEs, editors & utilities' },
 ]
 
 const moreLinks = [
-  { label: 'Latest Software', href: '/latest', icon: Clock },
-  { label: 'Most Downloaded', href: '/most-downloaded', icon: TrendingUp },
-  { label: 'Recently Updated', href: '/recently-updated', icon: RefreshCw },
+  { label: 'Latest Software',    href: '/latest',           icon: Clock },
+  { label: 'Most Downloaded',    href: '/most-downloaded',  icon: TrendingUp },
+  { label: 'Recently Updated',   href: '/recently-updated', icon: RefreshCw },
 ]
+
+/**
+ * resourceLinks — single source of truth for the Resources dropdown.
+ * Add / remove items here to update both desktop dropdown & mobile accordion.
+ */
+const resourceLinks = [
+  { label: 'AI Tools',         href: '/ai-tools',        icon: Bot,     desc: 'Discover curated AI tools' },
+  { label: 'Android Apps',     href: '/apk',             icon: Smartphone, desc: 'Emulators & Android apps' },
+  { label: 'Web Directory',    href: '/web-directory',   icon: Globe,   desc: 'Handpicked websites & links' },
+  { label: 'Premium Files',    href: '/premium-files',   icon: Star,    desc: 'Exclusive premium downloads' },
+  { label: 'Curated Websites', href: '/curated-websites',icon: Bookmark,desc: 'Bookmarks worth saving' },
+]
+
+/* ─── Reusable desktop dropdown shell ────────────────────────────── */
 
 const Dropdown = ({ label, children, isOpen, onToggle, id }) => (
   <div className="relative">
@@ -53,17 +70,23 @@ const Dropdown = ({ label, children, isOpen, onToggle, id }) => (
   </div>
 )
 
+/* ─── Navbar ──────────────────────────────────────────────────────── */
+
 const Navbar = ({ onSearch, searchQuery }) => {
   const { isDark, toggleTheme } = useTheme()
   const { isAdmin, signOut } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
 
-  const [isScrolled, setIsScrolled] = useState(false)
-  const [mobileOpen, setMobileOpen] = useState(false)
-  const [showSearch, setShowSearch] = useState(false)
-  const [softwareOpen, setSoftwareOpen] = useState(false)
-  const [moreOpen, setMoreOpen] = useState(false)
+  const [isScrolled,     setIsScrolled]     = useState(false)
+  const [mobileOpen,     setMobileOpen]     = useState(false)
+  const [showSearch,     setShowSearch]     = useState(false)
+  const [softwareOpen,   setSoftwareOpen]   = useState(false)
+  const [moreOpen,       setMoreOpen]       = useState(false)
+  const [resourcesOpen,  setResourcesOpen]  = useState(false)
+  // Mobile accordion
+  const [mobileResourcesOpen, setMobileResourcesOpen] = useState(false)
+
   const dropdownRef = useRef(null)
 
   useEffect(() => {
@@ -72,19 +95,22 @@ const Navbar = ({ onSearch, searchQuery }) => {
     return () => window.removeEventListener('scroll', handler)
   }, [])
 
+  // Close everything on route change
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMobileOpen(false)
     setSoftwareOpen(false)
     setMoreOpen(false)
+    setResourcesOpen(false)
+    setMobileResourcesOpen(false)
   }, [location.pathname])
 
-  // Close dropdowns on outside click
+  // Close desktop dropdowns on outside click
   useEffect(() => {
     const handleClick = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setSoftwareOpen(false)
         setMoreOpen(false)
+        setResourcesOpen(false)
       }
     }
     document.addEventListener('mousedown', handleClick)
@@ -101,9 +127,12 @@ const Navbar = ({ onSearch, searchQuery }) => {
     navigate('/')
   }
 
-  const navLinkStyle = { color: 'var(--text-secondary)' }
+  const navLinkStyle  = { color: 'var(--text-secondary)' }
   const activeLinkStyle = { color: 'var(--accent-primary)' }
   const isActive = (path) => location.pathname === path || location.pathname.startsWith(path + '/')
+
+  // True if any resource route is active (used to highlight the Resources button)
+  const isResourceActive = resourceLinks.some(r => isActive(r.href))
 
   return (
     <>
@@ -142,12 +171,6 @@ const Navbar = ({ onSearch, searchQuery }) => {
                 STL Files
               </Link>
 
-              <Link to="/ai-tools" id="nav-ai-tools"
-                className="px-3 py-2 rounded-xl text-sm font-medium transition-all"
-                style={isActive('/ai-tools') ? activeLinkStyle : navLinkStyle}>
-                AI Tools
-              </Link>
-
               <Link to="/blog" id="nav-blog"
                 className="px-3 py-2 rounded-xl text-sm font-medium transition-all"
                 style={isActive('/blog') ? activeLinkStyle : navLinkStyle}>
@@ -159,7 +182,7 @@ const Navbar = ({ onSearch, searchQuery }) => {
                 label="Software"
                 id="nav-software-btn"
                 isOpen={softwareOpen}
-                onToggle={() => { setSoftwareOpen(p => !p); setMoreOpen(false) }}
+                onToggle={() => { setSoftwareOpen(p => !p); setMoreOpen(false); setResourcesOpen(false) }}
               >
                 <div className="p-2">
                   {softwareLinks.map(link => (
@@ -187,7 +210,7 @@ const Navbar = ({ onSearch, searchQuery }) => {
                 label="Categories"
                 id="nav-categories-btn"
                 isOpen={moreOpen}
-                onToggle={() => { setMoreOpen(p => !p); setSoftwareOpen(false) }}
+                onToggle={() => { setMoreOpen(p => !p); setSoftwareOpen(false); setResourcesOpen(false) }}
               >
                 <div className="p-2">
                   {moreLinks.map(link => (
@@ -199,6 +222,39 @@ const Navbar = ({ onSearch, searchQuery }) => {
                     >
                       <link.icon className="w-4 h-4" style={{ color: 'var(--accent-primary)' }} />
                       <span className="text-sm">{link.label}</span>
+                    </Link>
+                  ))}
+                </div>
+              </Dropdown>
+
+              {/* ── Resources Dropdown ── */}
+              <Dropdown
+                label="Resources"
+                id="nav-resources-btn"
+                isOpen={resourcesOpen}
+                onToggle={() => { setResourcesOpen(p => !p); setSoftwareOpen(false); setMoreOpen(false) }}
+              >
+                <div className="p-2">
+                  {resourceLinks.map(link => (
+                    <Link
+                      key={link.href}
+                      to={link.href}
+                      id={`nav-resource-${link.label.toLowerCase().replace(/\s+/g, '-')}`}
+                      className="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all"
+                      style={{ color: 'var(--text-secondary)' }}
+                      onMouseEnter={e => e.currentTarget.style.background = 'var(--bg-secondary)'}
+                      onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                    >
+                      <div
+                        className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0"
+                        style={{ background: 'rgba(139,92,246,0.12)' }}
+                      >
+                        <link.icon className="w-3.5 h-3.5" style={{ color: 'var(--accent-primary)' }} />
+                      </div>
+                      <div>
+                        <p className="text-xs font-semibold" style={{ color: 'var(--text-primary)' }}>{link.label}</p>
+                        <p className="text-xs" style={{ color: 'var(--text-muted)' }}>{link.desc}</p>
+                      </div>
                     </Link>
                   ))}
                 </div>
@@ -284,25 +340,79 @@ const Navbar = ({ onSearch, searchQuery }) => {
               className="glass-strong lg:hidden" style={{ borderTop: '1px solid var(--border-glass)' }}>
               <div className="px-4 py-4 space-y-1 max-h-[70vh] overflow-y-auto">
                 {[
-                  { label: 'Home', href: '/' },
-                  { label: 'STL Files', href: '/stl-files' },
-                  { label: 'AI Tools', href: '/ai-tools' },
-                  { label: 'Blog', href: '/blog' },
-                  { label: 'Software Hub', href: '/software' },
-                  { label: 'Android APKs', href: '/apk' },
-                  { label: 'PDF Tools', href: '/pdf-tools' },
-                  { label: 'Developer Tools', href: '/developer-tools' },
-                  { label: 'Latest Software', href: '/latest' },
-                  { label: 'Most Downloaded', href: '/most-downloaded' },
-                  { label: 'About Us', href: '/about' },
-                  { label: 'Contact', href: '/contact' },
+                  { label: 'Home',             href: '/' },
+                  { label: 'STL Files',        href: '/stl-files' },
+                  { label: 'Blog',             href: '/blog' },
+                  { label: 'Software Hub',     href: '/software' },
+                  { label: 'Android APKs',     href: '/apk' },
+                  { label: 'PDF Tools',        href: '/pdf-tools' },
+                  { label: 'Developer Tools',  href: '/developer-tools' },
+                  { label: 'Latest Software',  href: '/latest' },
+                  { label: 'Most Downloaded',  href: '/most-downloaded' },
+                  { label: 'About Us',         href: '/about' },
+                  { label: 'Contact',          href: '/contact' },
                 ].map(item => (
                   <Link key={item.href} to={item.href}
                     className="flex items-center px-3 py-2.5 rounded-xl text-sm font-medium transition-all"
-                    style={{ color: isActive(item.href) ? 'var(--accent-primary)' : 'var(--text-secondary)', background: isActive(item.href) ? 'rgba(139,92,246,0.08)' : 'transparent' }}>
+                    style={{
+                      color: isActive(item.href) ? 'var(--accent-primary)' : 'var(--text-secondary)',
+                      background: isActive(item.href) ? 'rgba(139,92,246,0.08)' : 'transparent',
+                    }}>
                     {item.label}
                   </Link>
                 ))}
+
+                {/* ── Resources accordion ── */}
+                <div>
+                  <button
+                    id="mobile-resources-btn"
+                    onClick={() => setMobileResourcesOpen(p => !p)}
+                    className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all"
+                    style={{
+                      color: isResourceActive ? 'var(--accent-primary)' : 'var(--text-secondary)',
+                      background: isResourceActive ? 'rgba(139,92,246,0.08)' : 'transparent',
+                    }}
+                    aria-expanded={mobileResourcesOpen}
+                  >
+                    <span className="flex items-center gap-2">
+                      <LayoutGrid className="w-4 h-4" />
+                      Resources
+                    </span>
+                    <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${mobileResourcesOpen ? 'rotate-180' : ''}`} />
+                  </button>
+
+                  <AnimatePresence>
+                    {mobileResourcesOpen && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="overflow-hidden"
+                      >
+                        <div className="mt-1 ml-3 pl-3 space-y-0.5" style={{ borderLeft: '2px solid var(--border-glass)' }}>
+                          {resourceLinks.map(link => (
+                            <Link
+                              key={link.href}
+                              to={link.href}
+                              id={`mobile-resource-${link.label.toLowerCase().replace(/\s+/g, '-')}`}
+                              className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm font-medium transition-all"
+                              style={{
+                                color: isActive(link.href) ? 'var(--accent-primary)' : 'var(--text-secondary)',
+                                background: isActive(link.href) ? 'rgba(139,92,246,0.08)' : 'transparent',
+                              }}
+                            >
+                              <link.icon className="w-4 h-4 flex-shrink-0" style={{ color: 'var(--accent-primary)' }} />
+                              {link.label}
+                            </Link>
+                          ))}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+
+                {/* Admin links */}
                 {isAdmin && (
                   <>
                     <Link to="/secure-admin-upload"
